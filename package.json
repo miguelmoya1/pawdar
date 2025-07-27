@@ -1,0 +1,20 @@
+{
+  "name": "pawdar",
+  "version": "1.0.0",
+  "scripts": {
+    "functions": "cd functions && npm run serve",
+    "frontend": "cd frontend && npm run serve",
+    "emulators": "firebase emulators:start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miguelmoya1/pawdar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miguelmoya1/pawdar/issues"
+  },
+  "homepage": "https://github.com/miguelmoya1/pawdar#readme",
+  "description": ""
+}
