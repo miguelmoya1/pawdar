@@ -13,13 +13,15 @@ let testEnv: RulesTestEnvironment;
 describe('Firestore security rules', () => {
   beforeAll(async () => {
     // Resolve the path to the firestore.rules file from the project root
-    const rulesPath = resolve(__dirname, '../../../../firestore.rules');
+    const rulesPath = resolve('../../firestore.rules');
     const rules = readFileSync(rulesPath, 'utf8');
 
     testEnv = await initializeTestEnvironment({
       projectId: 'pawdar-test',
       firestore: {
         rules,
+        host: 'localhost',
+        port: 8080,
       },
     });
   });
