@@ -1,9 +1,4 @@
 {
-  "include": [
-    ".eslintrc.js",
-    "vitest.config.ts"
-  ],
-  "exclude": [
-    "**/*.spec.ts"
-  ]
+  "include": [".eslintrc.js", "vitest.config.ts"],
+  "exclude": ["**/*.spec.ts"]
 }
