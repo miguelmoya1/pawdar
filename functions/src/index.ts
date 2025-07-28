@@ -10,6 +10,4 @@ export const onUserCreated = onDocumentCreated(
   userCreatedController,
 );
 
-// Callable function to upgrade a building.
-// It's important to export the function so it can be deployed.
 // export const upgradeBuilding = onCall(upgradeBuildingController);

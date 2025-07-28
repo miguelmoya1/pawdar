@@ -1,7 +1,10 @@
 {
   "eslint.workingDirectories": ["./functions"],
   "cSpell.words": [
+    "firebaseapp",
+    "firebasestorage",
     "firestore",
+    "geohash",
     "nodenext",
     "pawdar"
   ],
