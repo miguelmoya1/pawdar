@@ -1,6 +1,10 @@
 {
   "eslint.workingDirectories": ["./functions"],
-  "cSpell.words": ["firestore", "pawdar"],
+  "cSpell.words": [
+    "firestore",
+    "nodenext",
+    "pawdar"
+  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   }
