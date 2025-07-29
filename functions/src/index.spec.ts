@@ -1,8 +1,12 @@
-import { describe, expect, it, Mock, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 vi.mock("firebase-functions/v2", () => ({
-  logger: {
-    info: vi.fn(),
+  https: {
+    onCall: vi.fn((handler: (data: unknown) => Promise<unknown>) => {
+      return async (data: unknown) => {
+        return handler(data);
+      };
+    }),
   },
   setGlobalOptions: vi.fn(),
 }));
@@ -42,36 +46,6 @@ describe("main index for functions", () => {
       await import("./index");
 
       expect(setGlobalOptions).toHaveBeenCalledWith({ maxInstances: 10 });
-    });
-  });
-
-  describe("create user when authenticated", () => {
-    it("should trigger on user document creation", async () => {
-      const { onDocumentCreated } = await import(
-        "firebase-functions/firestore"
-      );
-
-      await import("./index");
-
-      expect(onDocumentCreated).toHaveBeenCalledWith(
-        "users/{userId}",
-        expect.any(Function),
-      );
-    });
-
-    it("should call userCreatedController on document creation", async () => {
-      const { userCreatedController } = await import(
-        "./presentation/user.controller"
-      );
-
-      const { onDocumentCreated } = await import(
-        "firebase-functions/firestore"
-      );
-      const mockHandler = (
-        (onDocumentCreated as Mock).mock.calls[0] as unknown[]
-      )[1];
-
-      expect(mockHandler).toBe(userCreatedController);
     });
   });
 });

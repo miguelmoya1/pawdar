@@ -6,7 +6,7 @@ export type CreateUserParams = Partial<User> & { uid: string } & Pick<
     "email" | "username" | "role"
   >;
 
-const createUser = async (user: CreateUserParams) => {
+const create = async (user: CreateUserParams) => {
   try {
     return await db.collection("users").doc(user.uid).set(user);
   } catch (error) {
@@ -14,7 +14,7 @@ const createUser = async (user: CreateUserParams) => {
   }
 };
 
-const getUserById = async (uid: string): Promise<User | null> => {
+const getById = async (uid: string): Promise<User | null> => {
   try {
     const doc = await db.collection("users").doc(uid).get();
     if (!doc.exists) {
@@ -26,7 +26,7 @@ const getUserById = async (uid: string): Promise<User | null> => {
   }
 };
 
-const updateUser = async (uid: string, data: Partial<User>) => {
+const update = async (uid: string, data: Partial<User>) => {
   try {
     return await db.collection("users").doc(uid).update(data);
   } catch (error) {
@@ -35,9 +35,9 @@ const updateUser = async (uid: string, data: Partial<User>) => {
 };
 
 const userRepository = {
-  createUser,
-  getUserById,
-  updateUser,
+  create,
+  getById,
+  update,
 };
 
 export { userRepository };

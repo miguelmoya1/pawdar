@@ -1,65 +1,65 @@
-import { UserRecord } from "firebase-admin/auth";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { upsetUserHandler } from "./upset-user.handler";
+import { userRepository } from "../../../repository";
+import { Timestamp } from "firebase-admin/firestore";
 
-vi.mock("../../../repository", () => {
-  return {
-    createUser: vi.fn(),
-    CreateUserParams: {},
-  };
-});
+vi.mock("firebase-admin", () => ({
+  auth: () => ({
+    getUser: vi.fn().mockResolvedValue({
+      uid: "abc123",
+      email: "test@test.com",
+      displayName: "Test User",
+    }),
+  }),
+}));
 
-vi.mock("firebase-functions", () => ({
-  logger: {
-    info: vi.fn(),
+vi.mock("../../../repository", () => ({
+  userRepository: {
+    create: vi.fn().mockResolvedValue({ success: true }),
+    update: vi.fn().mockResolvedValue({ success: true }),
+    getById: vi.fn().mockImplementation((uid) => {
+      if (uid === "existing-user") {
+        return Promise.resolve({ uid: "existing-user" });
+      }
+      return Promise.resolve(null);
+    }),
   },
 }));
 
-describe("upsetUserHandler.handle", () => {
+describe("upsetUserHandler", () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should call logger.info and createUser with correct params", async () => {
-    const fakeUserRecord = {
-      uid: "abc123",
-      email: "test@example.com",
-      displayName: "test-user",
-    } as unknown as UserRecord;
-
-    await upsetUserHandler.handle(fakeUserRecord);
-
-    const { logger } = await import("firebase-functions");
-    const { createUser } = await import("../../../repository");
-    expect(logger.info).toHaveBeenCalledWith("Handling user created: abc123");
-    expect(createUser).toHaveBeenCalledWith(
+  it("creates a user if it does not exist", async () => {
+    const result = await upsetUserHandler.handle("abc123");
+    expect(userRepository.create).toHaveBeenCalledWith(
       expect.objectContaining({
         uid: "abc123",
-        email: "test@example.com",
-        username: "test-user",
-        resources: expect.objectContaining({
-          cpuCycles: 500,
-          memory: 250,
-          bandwidth: expect.objectContaining({ current: 0, max: 0 }) as unknown,
-        }) as unknown,
+        email: "test@test.com",
+        username: "Test User",
+        role: "user",
       }),
     );
+    expect(result).toEqual({ success: true });
+    expect(userRepository.update).not.toHaveBeenCalled();
   });
 
-  it("should use empty string for missing email and username", async () => {
-    const fakeUserRecord = {
-      uid: "no-info",
-    } as unknown as UserRecord;
-
-    await upsetUserHandler.handle(fakeUserRecord);
-
-    const { createUser } = await import("../../../repository");
-    expect(createUser).toHaveBeenCalledWith(
-      expect.objectContaining({
-        uid: "no-info",
-        email: "",
-        username: "",
-      }),
+  it("updates lastLogin if the user already exists", async () => {
+    const result = await upsetUserHandler.handle("existing-user");
+    expect(userRepository.update).toHaveBeenCalledWith(
+      "existing-user",
+      expect.objectContaining({ lastLogin: expect.any(Object) as Timestamp }),
     );
+    expect(result).toEqual({ success: true });
+    expect(userRepository.create).not.toHaveBeenCalled();
+  });
+
+  it("throws an error if no uid is provided", async () => {
+    await expect(upsetUserHandler.handle()).rejects.toThrow(
+      "User must be authenticated.",
+    );
+    expect(userRepository.create).not.toHaveBeenCalled();
+    expect(userRepository.update).not.toHaveBeenCalled();
   });
 });

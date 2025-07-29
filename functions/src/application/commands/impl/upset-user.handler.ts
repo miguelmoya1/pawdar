@@ -1,5 +1,4 @@
 import { Timestamp } from "firebase-admin/firestore";
-import { logger } from "firebase-functions/v2";
 import { CreateUserParams, userRepository } from "../../../repository";
 import { auth } from "firebase-admin";
 
@@ -8,7 +7,7 @@ const handle = async (uid?: string) => {
     throw new Error("User must be authenticated.");
   }
 
-  const userExists = await userRepository.getUserById(uid);
+  const userExists = await userRepository.getById(uid);
 
   if (!userExists) {
     const userRecord = await auth().getUser(uid);
@@ -22,12 +21,10 @@ const handle = async (uid?: string) => {
       role: "user",
     };
 
-    logger.info(`Handling user created: ${userProfile.uid}`);
-    return await userRepository.createUser(userProfile);
+    return await userRepository.create(userProfile);
   }
 
-  logger.info(`Handling user updated: ${uid}`);
-  return await userRepository.updateUser(uid, {
+  return await userRepository.update(uid, {
     lastLogin: Timestamp.now(),
   });
 };

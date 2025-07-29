@@ -1,64 +1,25 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { userCreatedController } from "./user.controller";
-import { logger } from "firebase-functions/v2";
-import { onUserCreatedHandler } from "../application/events";
-import { FirestoreEvent } from "firebase-functions/firestore";
-import { QueryDocumentSnapshot } from "firebase-admin/firestore";
+import { upsetUserHandler } from "../application/commands";
+import { upsetUserController } from "./user.controller";
+import { CallableRequest } from "firebase-functions/https";
 
-vi.mock("../application/events", () => ({
-  onUserCreatedHandler: { handle: vi.fn() },
+vi.mock("../application/commands", () => ({
+  upsetUserHandler: { handle: vi.fn() },
 }));
 
-vi.mock("firebase-functions/v2", () => ({
-  logger: {
-    info: vi.fn(),
-    error: vi.fn(),
-  },
-}));
-
-describe("userCreatedController", () => {
+describe("upsetUserController", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should call handle with user data if present", async () => {
-    const fakeUser = { name: "Test", email: "test@example.com" };
+  it("should call the handler upsetUserHandler with the auth uid", async () => {
+    const authUid = "test-user";
     const event = {
-      params: { userId: "test-user" },
-      data: { data: () => fakeUser },
-    } as unknown as FirestoreEvent<QueryDocumentSnapshot, { userId: string }>;
+      auth: { uid: authUid },
+    } as unknown as CallableRequest;
 
-    await userCreatedController(event);
+    await upsetUserController(event);
 
-    expect(onUserCreatedHandler.handle).toHaveBeenCalledWith(fakeUser);
-    expect(logger.error).not.toHaveBeenCalled();
-  });
-
-  it("should log an error and not call handle if user data is missing", async () => {
-    const event = {
-      params: { userId: "test-user" },
-      data: { data: () => undefined },
-    } as unknown as FirestoreEvent<QueryDocumentSnapshot, { userId: string }>;
-
-    await userCreatedController(event);
-
-    expect(logger.error).toHaveBeenCalledWith(
-      "No user data found for userId: test-user",
-    );
-    expect(onUserCreatedHandler.handle).not.toHaveBeenCalled();
-  });
-
-  it("should log an info message with the userId", async () => {
-    const fakeUser = { name: "Test", email: "test@example.com" };
-    const event = {
-      params: { userId: "test-user" },
-      data: { data: () => fakeUser },
-    } as unknown as FirestoreEvent<QueryDocumentSnapshot, { userId: string }>;
-
-    await userCreatedController(event);
-
-    expect(logger.info).toHaveBeenCalledWith(
-      "New user document created: test-user",
-    );
+    expect(upsetUserHandler.handle).toHaveBeenCalledWith(authUid);
   });
 });
