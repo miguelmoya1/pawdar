@@ -338,5 +338,9 @@
 <!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
+<button
+  (click)="isLogged() ? logout() : login()"
+> {{isLogged() ? 'Log out' : 'Login' }} </button>
+
 
 <router-outlet />

@@ -6,7 +6,8 @@
     "firestore",
     "geohash",
     "nodenext",
-    "pawdar"
+    "pawdar",
+    "predeploy"
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"

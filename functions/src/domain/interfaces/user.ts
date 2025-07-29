@@ -6,4 +6,5 @@ export interface User {
   readonly username: string;
   readonly role: "user" | "admin";
   readonly createdAt: firestore.Timestamp;
+  readonly lastLogin?: firestore.Timestamp;
 }

@@ -1,6 +1,6 @@
 import { UserRecord } from "firebase-admin/auth";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { onUserCreatedHandler } from "./on-user-created";
+import { upsetUserHandler } from "./upset-user.handler";
 
 vi.mock("../../../repository", () => {
   return {
@@ -15,7 +15,7 @@ vi.mock("firebase-functions", () => ({
   },
 }));
 
-describe("onUserCreatedHandler.handle", () => {
+describe("upsetUserHandler.handle", () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -27,7 +27,7 @@ describe("onUserCreatedHandler.handle", () => {
       displayName: "test-user",
     } as unknown as UserRecord;
 
-    await onUserCreatedHandler.handle(fakeUserRecord);
+    await upsetUserHandler.handle(fakeUserRecord);
 
     const { logger } = await import("firebase-functions");
     const { createUser } = await import("../../../repository");
@@ -51,7 +51,7 @@ describe("onUserCreatedHandler.handle", () => {
       uid: "no-info",
     } as unknown as UserRecord;
 
-    await onUserCreatedHandler.handle(fakeUserRecord);
+    await upsetUserHandler.handle(fakeUserRecord);
 
     const { createUser } = await import("../../../repository");
     expect(createUser).toHaveBeenCalledWith(

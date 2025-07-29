@@ -2,19 +2,28 @@ import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
+  isDevMode,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getAuth, provideAuth, connectAuthEmulator } from '@angular/fire/auth';
 import {
   getAnalytics,
   provideAnalytics,
   ScreenTrackingService,
   UserTrackingService,
 } from '@angular/fire/analytics';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { getFunctions, provideFunctions } from '@angular/fire/functions';
+import {
+  getFirestore,
+  provideFirestore,
+  connectFirestoreEmulator,
+} from '@angular/fire/firestore';
+import {
+  getFunctions,
+  provideFunctions,
+  connectFunctionsEmulator,
+} from '@angular/fire/functions';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -32,11 +41,29 @@ export const appConfig: ApplicationConfig = {
         measurementId: 'G-TPN9E0PMR5',
       }),
     ),
-    provideAuth(() => getAuth()),
+    provideAuth(() => {
+      const auth = getAuth();
+      if (isDevMode()) {
+        connectAuthEmulator(auth, 'http://localhost:9098');
+      }
+      return auth;
+    }),
     provideAnalytics(() => getAnalytics()),
     ScreenTrackingService,
     UserTrackingService,
-    provideFirestore(() => getFirestore()),
-    provideFunctions(() => getFunctions()),
+    provideFirestore(() => {
+      const firestore = getFirestore();
+      if (isDevMode()) {
+        connectFirestoreEmulator(firestore, 'localhost', 8082);
+      }
+      return firestore;
+    }),
+    provideFunctions(() => {
+      const functions = getFunctions();
+      if (isDevMode()) {
+        connectFunctionsEmulator(functions, 'localhost', 5001);
+      }
+      return functions;
+    }),
   ],
 };
