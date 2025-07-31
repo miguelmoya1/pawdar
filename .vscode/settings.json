@@ -11,6 +11,21 @@
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
-  }
+  },
+    "material-icon-theme.folders.associations": {
+    "data": "Global",
+    "dto": "Less",
+    "mappers": "Mappings",
+    "di": "Resource",
+    "domain": "Class",
+    "data-access": "Base",
+    "use-cases": "Other",
+    "impl": "Class",
+    "queries": "Mjml",
+    "builders": "Include",
+    "interceptors": "Connection",
+    "entities": "Import",
+    "features": "Controller"
+  },
 }
 

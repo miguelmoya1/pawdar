@@ -30,7 +30,7 @@ service cloud.firestore {
     }
 
     match /pets/{petId} {
-      allow read: if resource.data.status == 'missing';
+      allow read: if resource.data.status == 'missing' || isOwner(resource.data.ownerId) || isAdmin();
 
       allow create: if isSignedIn() && incomingPetDataIsValid();
 

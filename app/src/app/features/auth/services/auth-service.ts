@@ -1,17 +1,13 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
-  Functions,
-  getFunctions,
-  httpsCallable,
-} from '@angular/fire/functions';
-import {
   Auth,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
   user,
 } from '@angular/fire/auth';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { AuthService } from './auth-service.contract';
 
 @Injectable()
