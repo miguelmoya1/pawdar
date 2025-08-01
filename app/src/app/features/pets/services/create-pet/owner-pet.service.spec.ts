@@ -13,11 +13,9 @@ describe('OwnerPetServiceImpl', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('pets', () => {
-    it('should return a Resource of PetEntity array', () => {
-      const petsResource = service.pets;
-      expect(petsResource).toBeDefined();
-      expect(petsResource.value).toBeInstanceOf(Array);
+  describe('create', () => {
+    it('should have a create function', () => {
+      expect(service.create).toBeDefined();
     });
   });
 });

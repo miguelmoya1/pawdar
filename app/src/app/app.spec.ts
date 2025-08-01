@@ -1,11 +1,14 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from './app';
+
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [App],
+      imports: [App, TranslateModule.forRoot()],
       providers: [provideZonelessChangeDetection()]
     }).compileComponents();
   });

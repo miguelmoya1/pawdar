@@ -1,3 +1,4 @@
+import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { OwnerPetServiceImpl } from './owner-pet.service';
 
@@ -5,7 +6,9 @@ describe('OwnerPetServiceImpl', () => {
   let service: OwnerPetServiceImpl;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideZonelessChangeDetection()]
+    });
     service = TestBed.inject(OwnerPetServiceImpl);
   });
 
