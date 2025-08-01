@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-menu',
-  imports: [MatIcon, TranslateModule],
+  imports: [MatIcon, TranslatePipe],
   template: `
     <nav
       class="flex items-center justify-around bg-gray-50/5 p-4 text-gray-600"
@@ -16,10 +16,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         </div>
       }
     </nav>
-    <div class="flex justify-center">
-      <button (click)="switchLang('en')">English</button>
-      <button (click)="switchLang('es')">Español</button>
-    </div>
   `,
 })
 export class Menu {
@@ -28,13 +24,4 @@ export class Menu {
     { icon: 'add_box', label: 'MENU.PUBLISH' },
     { icon: 'person', label: 'MENU.PROFILE' },
   ]);
-
-  constructor(private translate: TranslateService) {
-    translate.setDefaultLang('en');
-    translate.use('en');
-  }
-
-  switchLang(lang: string) {
-    this.translate.use(lang);
-  }
 }

@@ -11,7 +11,9 @@
     "predeploy"
   ],
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "always",
+    "source.organizeImports": "always",
+    "source.removeUnusedImports": "always"
   },
     "material-icon-theme.folders.associations": {
     "data": "Global",

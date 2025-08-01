@@ -1,6 +1,9 @@
 {
   "MENU": {
     "PETS": "Pets",
-    "PROFILE": "Profile"
+    "PROFILE": "Profile",
+    "PUBLISH": "Publish",
+    "SPANISH": "Spanish",
+    "ENGLISH": "English"
   }
 }

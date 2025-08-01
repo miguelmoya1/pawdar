@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Menu } from './components/menu/menu';
 
 @Component({
@@ -21,4 +22,12 @@ import { Menu } from './components/menu/menu';
 })
 export class App {
   protected readonly title = signal('pawdar');
+
+  readonly #translate = inject(TranslateService);
+
+  constructor() {
+    this.#translate.addLangs(['en', 'es']);
+    this.#translate.setFallbackLang('en');
+    this.#translate.use('en');
+  }
 }
