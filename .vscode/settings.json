@@ -4,6 +4,7 @@
     "firebaseapp",
     "firebasestorage",
     "firestore",
+    "geofire",
     "geohash",
     "nodenext",
     "pawdar",
