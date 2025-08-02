@@ -1,11 +1,14 @@
 import { Component, effect, inject } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { MatProgressBar } from '@angular/material/progress-bar';
-import { PET_SERVICE } from '../../features/pets';
+import { TranslatePipe } from '@ngx-translate/core';
+import { Info } from '../../components/impl/info/info';
+import { PET_SERVICE, PetCard } from '../../features/pets';
 import { TOOLBAR_SERVICE } from '../../services';
 
 @Component({
   selector: 'app-missing-pets',
-  imports: [MatProgressBar],
+  imports: [MatProgressBar, PetCard, MatButton, TranslatePipe, Info],
   template: `
     @if (petsResource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
@@ -13,14 +16,29 @@ import { TOOLBAR_SERVICE } from '../../services';
 
     @if (petsResource.hasValue()) {
       @for (pet of petsResource.value(); track pet.uid) {
-        <!-- <app-pet-card /> -->
+        <app-pet-card [pet]="pet" />
       } @empty {
-        <p>No pets found</p>
+        <app-info
+          label="{{ 'MISSING_PETS.EMPTY_PETS' | translate }}"
+          description="{{ 'MISSING_PETS.EMPTY_PETS_DESCRIPTION' | translate }}"
+          imageUrl="imgs/happy.png"
+        />
       }
     }
 
     @if (petsResource.error()) {
-      <p>Error loading pets</p>
+      <div class="flex flex-col items-center gap-6">
+        <app-info
+          label="{{ 'MISSING_PETS.ERROR_LOAD_PETS' | translate }}"
+          description="{{
+            'MISSING_PETS.ERROR_LOAD_PETS_DESCRIPTION' | translate
+          }}"
+          imageUrl="imgs/sad.png"
+        />
+        <button matButton>
+          <span class="truncate">{{ 'MISSING_PETS.RETRY' | translate }}</span>
+        </button>
+      </div>
     }
   `,
   host: {
@@ -37,8 +55,6 @@ export class MissingPets {
     effect((cleanup) => {
       this.#toolbarService.title.set('Missing Pets');
       this.#toolbarService.showBackButton.set(false);
-
-      console.log(this.petsResource.value());
 
       cleanup(() => {
         this.#toolbarService.reset();

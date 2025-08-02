@@ -7,6 +7,10 @@
     "ENGLISH": "Inglés"
   },
   "MISSING_PETS": {
-    "MISSING_PETS": "Mascotas Perdidas"
+    "RETRY": "Retry",
+    "EMPTY_PETS": "No hay mascotas perdidas en este momento",
+    "EMPTY_PETS_DESCRIPTION": "¡Buenas noticias! No hay mascotas perdidas en este momento. Si has perdido una mascota, por favor, publícala para que otros puedan ayudarte.",
+    "ERROR_LOAD_PETS": "Error al cargar las mascotas perdidas",
+    "ERROR_LOAD_PETS_DESCRIPTION": "Hubo un problema al cargar las mascotas perdidas. Por favor, inténtalo de nuevo más tarde."
   }
 }

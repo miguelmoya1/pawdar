@@ -1,5 +1,11 @@
 import { inject, Injectable, resource } from '@angular/core';
-import { collection, Firestore, getDocs, query, where } from '@angular/fire/firestore';
+import {
+  collection,
+  Firestore,
+  getDocs,
+  query,
+  where,
+} from '@angular/fire/firestore';
 import { mapPetArrayToEntityArray } from '../../mappers/pet.mapper';
 import { PetService } from './pet.service.contract';
 

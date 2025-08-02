@@ -7,6 +7,10 @@
     "ENGLISH": "English"
   },
   "MISSING_PETS": {
-    "MISSING_PETS": "Missing Pets"
+    "RETRY": "Retry",
+    "EMPTY_PETS": "No lost pets at the moment",
+    "EMPTY_PETS_DESCRIPTION": "Good news! There are no lost pets at the moment. If you have lost a pet, please publish it so others can help you.",
+    "ERROR_LOAD_PETS": "Error loading lost pets",
+    "ERROR_LOAD_PETS_DESCRIPTION": "There was a problem loading the lost pets. Please try again later."
   }
 }
