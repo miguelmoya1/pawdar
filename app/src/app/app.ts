@@ -1,15 +1,16 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Menu } from './components/menu/menu';
+import { Menu, Toolbar } from './components';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Menu],
+  imports: [RouterOutlet, Menu, Toolbar],
   template: `
     <div
-      class="grid grid-rows-[1fr_auto] md:grid-rows-[auto_1fr] h-full"
+      class="grid grid-rows-[auto_1fr_auto] h-full md:grid-rows-[auto_auto_1fr]"
     >
+      <app-toolbar />
       <main>
         <router-outlet />
       </main>

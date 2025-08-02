@@ -1,7 +1,7 @@
 import { GeoPoint, Timestamp } from '@angular/fire/firestore';
 
 export abstract class Pet {
-  declare public readonly id: string;
+  declare public readonly uid: string;
   declare public readonly ownerId: string;
 
   declare public readonly name: string;
@@ -18,7 +18,7 @@ export abstract class Pet {
   declare public readonly lastUpdate: Timestamp;
 
   protected constructor(pet: Pet) {
-    this.id = pet.id;
+    this.uid = pet.uid;
     this.ownerId = pet.ownerId;
 
     this.name = pet.name;

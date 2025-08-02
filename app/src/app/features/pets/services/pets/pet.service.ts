@@ -5,7 +5,6 @@ import {
   collectionData,
   Firestore,
   query,
-  where,
 } from '@angular/fire/firestore';
 import { map } from 'rxjs';
 import { mapPetArrayToEntityArray } from '../../mappers/pet.mapper';
@@ -19,7 +18,7 @@ export class PetServiceImpl implements PetService {
     stream: () => {
       const queryRef = query(
         this.#petCollection,
-        where('status', '==', 'missing'),
+        // where('status', '==', 'missing'),
         // TODO: Add geolocation filter (geohash)
       );
 

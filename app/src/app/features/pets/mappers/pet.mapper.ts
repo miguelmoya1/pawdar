@@ -29,7 +29,7 @@ export const mapPetToEntity = (data: unknown) => {
   }
 
   return PetEntity.from({
-    id: data.id,
+    uid: data.uid,
     name: data.name,
     description: data.description,
     type: data.type,

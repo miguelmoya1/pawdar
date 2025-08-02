@@ -45,12 +45,13 @@
     workspace = {
       # Runs when a workspace is first created
       onCreate = {
-        npm-install = "npm install";
-        npm-install-app = "cd app && npm install";
-        npm-install-functions = "cd functions && npm install";
+        npm-install-blobals = "npm i -g @angular/cli";
       };
       # Runs when the workspace is (re)started
       onStart = {
+        npm-install = "npm install";
+        npm-install-app = "cd app && npm install";
+        npm-install-functions = "cd functions && npm install";
         # Example: start a background task to watch and re-build backend code
         # watch-backend = "npm run watch-backend";
       };
