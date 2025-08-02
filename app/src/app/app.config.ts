@@ -1,34 +1,32 @@
+import { provideHttpClient } from '@angular/common/http';
 import {
   ApplicationConfig,
+  isDevMode,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
-  isDevMode,
-  importProvidersFrom,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getAuth, provideAuth, connectAuthEmulator } from '@angular/fire/auth';
 import {
   getAnalytics,
   provideAnalytics,
   ScreenTrackingService,
   UserTrackingService,
 } from '@angular/fire/analytics';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { connectAuthEmulator, getAuth, provideAuth } from '@angular/fire/auth';
 import {
+  connectFirestoreEmulator,
   getFirestore,
   provideFirestore,
-  connectFirestoreEmulator,
 } from '@angular/fire/firestore';
 import {
+  connectFunctionsEmulator,
   getFunctions,
   provideFunctions,
-  connectFunctionsEmulator,
 } from '@angular/fire/functions';
-import { provideHttpClient } from '@angular/common/http';
-import { provideTranslateService, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { provideTranslateHttpLoader, TranslateHttpLoader } from '@ngx-translate/http-loader';
-
+import { provideRouter } from '@angular/router';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,7 +37,7 @@ export const appConfig: ApplicationConfig = {
         suffix: '.json',
       }),
       fallbackLang: 'en',
-      lang: 'en'
+      lang: 'en',
     }),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
@@ -68,7 +66,7 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => {
       const firestore = getFirestore();
       if (isDevMode()) {
-        connectFirestoreEmulator(firestore, 'localhost', 8082);
+        connectFirestoreEmulator(firestore, 'localhost', 8080);
       }
       return firestore;
     }),

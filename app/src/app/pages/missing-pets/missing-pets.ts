@@ -1,23 +1,19 @@
 import { Component, effect, inject } from '@angular/core';
 import { MatProgressBar } from '@angular/material/progress-bar';
-import { TranslatePipe } from '@ngx-translate/core';
-import { Title } from '../../components';
 import { PET_SERVICE } from '../../features/pets';
 import { TOOLBAR_SERVICE } from '../../services';
 
 @Component({
   selector: 'app-missing-pets',
-  imports: [Title, TranslatePipe, MatProgressBar],
+  imports: [MatProgressBar],
   template: `
-    <app-title> {{ 'MISSING_PETS.MISSING_PETS' | translate }} </app-title>
-
     @if (petsResource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
     }
 
     @if (petsResource.hasValue()) {
       @for (pet of petsResource.value(); track pet.uid) {
-        <!-- <app-pet-card *ngFor="let pet of petsResource.value()" /> -->
+        <!-- <app-pet-card /> -->
       } @empty {
         <p>No pets found</p>
       }
@@ -28,7 +24,7 @@ import { TOOLBAR_SERVICE } from '../../services';
     }
   `,
   host: {
-    class: 'px-6',
+    class: 'block mx-6',
   },
 })
 export class MissingPets {
@@ -42,7 +38,7 @@ export class MissingPets {
       this.#toolbarService.title.set('Missing Pets');
       this.#toolbarService.showBackButton.set(false);
 
-      console.log(this.petsResource.error());
+      console.log(this.petsResource.value());
 
       cleanup(() => {
         this.#toolbarService.reset();

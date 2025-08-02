@@ -3,7 +3,7 @@ import { PetEntity } from '../../entities/pet.entity';
 import { PetServiceImpl } from './pet.service';
 
 export interface PetService {
-  readonly pets: Resource<PetEntity[]>;
+  readonly pets: Resource<PetEntity[] | undefined>;
 }
 
 export const PET_SERVICE = new InjectionToken<PetService>('PET_SERVICE', {
