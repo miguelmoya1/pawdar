@@ -1,14 +1,15 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource } from '@angular/core/rxjs-interop';
 import {
   Auth,
   GoogleAuthProvider,
-  signInWithPopup,
   signOut,
+  User,
   user,
 } from '@angular/fire/auth';
 import { Functions, httpsCallable } from '@angular/fire/functions';
-import { AuthService } from './auth-service.contract';
+import { map } from 'rxjs';
+import { AuthService } from './auth.service.contract';
 
 @Injectable()
 export class AuthServiceImpl implements AuthService {
@@ -17,8 +18,10 @@ export class AuthServiceImpl implements AuthService {
   readonly #isReady = signal(false);
   readonly #googleProvider = new GoogleAuthProvider();
 
-  readonly user = toSignal(user(this.#auth), { initialValue: null });
-  readonly isLogged = computed(() => Boolean(this.user()));
+  readonly user = rxResource({
+    stream: () => user(this.#auth).pipe(map((user) => user || undefined)),
+  });
+  readonly isLogged = computed(() => Boolean(this.user.hasValue()));
   readonly isReady = this.#isReady.asReadonly();
 
   constructor() {
@@ -26,10 +29,20 @@ export class AuthServiceImpl implements AuthService {
   }
 
   public async loginGoogle() {
-    await signInWithPopup(this.#auth, this.#googleProvider);
-    const upsetUser = httpsCallable(this.#functions, 'upsetUser');
+    const upsetUser = httpsCallable<unknown, User>(
+      this.#functions,
+      'upsetUser',
+    );
 
-    await upsetUser();
+    try {
+      const response = await upsetUser();
+
+      this.user.set(response.data);
+      return true;
+    } catch (error) {
+      console.error('Error during user upset:', error);
+      return false;
+    }
   }
 
   public async logout() {
@@ -38,6 +51,8 @@ export class AuthServiceImpl implements AuthService {
 
   async #initialize() {
     await this.#auth.authStateReady();
+
+    this.user.set(this.#auth.currentUser || undefined);
 
     this.#googleProvider.addScope('profile');
     this.#googleProvider.addScope('email');

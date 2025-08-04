@@ -2,9 +2,9 @@ import { Component, effect, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Info } from '../../components/impl/info/info';
-import { PET_SERVICE, PetCard } from '../../features/pets';
-import { TOOLBAR_SERVICE } from '../../services';
+import { Info } from '../../../../components/impl/info/info';
+import { PET_SERVICE, PetCard } from '../../../../features/pets';
+import { TOOLBAR_SERVICE } from '../../../../services';
 
 @Component({
   selector: 'app-missing-pets',

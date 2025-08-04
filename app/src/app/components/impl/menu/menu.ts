@@ -29,8 +29,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class Menu {
   protected readonly links = signal([
-    { icon: 'cruelty_free', label: 'MENU.PETS', href: '/missing-pets' },
-    { icon: 'add_box', label: 'MENU.PUBLISH', href: '/publish-pet' },
+    { icon: 'cruelty_free', label: 'MENU.PETS', href: 'pets/missing' },
+    // { icon: 'add_box', label: 'MENU.PUBLISH', href: '/publish-pet' },
     { icon: 'person', label: 'MENU.PROFILE', href: '/profile' },
   ]);
 }

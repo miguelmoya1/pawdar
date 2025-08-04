@@ -14,6 +14,7 @@ import { TOOLBAR_SERVICE } from '../../../services';
           matIconButton
           class="example-icon"
           aria-label="Example icon-button with menu icon"
+          (click)="goBack()"
         >
           <mat-icon>arrow_back</mat-icon>
         </button>
@@ -41,4 +42,8 @@ export class Toolbar {
   readonly title = this.#toolbar.title;
   readonly showBackButton = this.#toolbar.showBackButton;
   readonly extraButtons = this.#toolbar.extraButtons;
+
+  protected goBack() {
+    history.back();
+  }
 }

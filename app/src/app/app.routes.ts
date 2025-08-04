@@ -1,15 +1,20 @@
 import { Routes } from '@angular/router';
+import { isLoggedFn } from './features/auth';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'missing-pets',
+    redirectTo: 'pets',
   },
   {
-    path: 'missing-pets',
-    loadChildren: () =>
-      import('./pages/missing-pets/routes/missing-pets.route'),
+    path: 'pets',
+    loadChildren: () => import('./pages/pets/routes/pets.route'),
+  },
+  {
+    path: 'profile',
+    canMatch: [isLoggedFn],
+    loadChildren: () => import('./pages/profile/routes/profile.route'),
   },
   {
     path: '**',

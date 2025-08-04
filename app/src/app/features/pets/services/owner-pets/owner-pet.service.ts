@@ -1,13 +1,11 @@
-import { inject, Injectable } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { inject, Injectable, resource } from '@angular/core';
 import {
   collection,
-  collectionData,
   Firestore,
+  getDocs,
   query,
   where,
 } from '@angular/fire/firestore';
-import { map } from 'rxjs';
 import { AUTH_SERVICE } from '../../../auth';
 import { mapPetArrayToEntityArray } from '../../mappers/pet.mapper';
 import { OwnerPetService } from './owner-pet.service.contract';
@@ -17,11 +15,11 @@ export class OwnerPetServiceImpl implements OwnerPetService {
   readonly #firestore = inject(Firestore);
   readonly #petCollection = collection(this.#firestore, 'pets');
   readonly #authService = inject(AUTH_SERVICE);
-  readonly #pets = rxResource({
+  readonly #pets = resource({
     params: () => ({
-      ownerId: this.#authService.user()?.uid,
+      ownerId: this.#authService.user.value()?.uid,
     }),
-    stream: ({ params }) => {
+    loader: async ({ params }) => {
       const { ownerId } = params;
 
       const queryRef = query(
@@ -29,7 +27,9 @@ export class OwnerPetServiceImpl implements OwnerPetService {
         where('ownerId', '==', ownerId),
       );
 
-      return collectionData(queryRef).pipe(map(mapPetArrayToEntityArray));
+      const docs = await getDocs(queryRef);
+
+      return mapPetArrayToEntityArray(docs.docs);
     },
     defaultValue: [],
   });

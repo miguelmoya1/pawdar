@@ -1,13 +1,13 @@
-import { InjectionToken, Signal } from '@angular/core';
+import { InjectionToken, Resource, Signal } from '@angular/core';
 import { User } from '@angular/fire/auth';
-import { AuthServiceImpl } from './auth-service';
+import { AuthServiceImpl } from './auth.service';
 
 export interface AuthService {
   readonly isLogged: Signal<boolean>;
-  readonly user: Signal<User | null>;
+  readonly user: Resource<User | undefined>;
   readonly isReady: Signal<boolean>;
 
-  loginGoogle(): Promise<void>;
+  loginGoogle(): Promise<boolean>;
   logout(): Promise<void>;
 }
 

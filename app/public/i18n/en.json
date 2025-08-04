@@ -1,4 +1,9 @@
 {
+  "DOG": "Dog",
+  "CAT": "Cat",
+  "BIRD": "Bird",
+  "RODENT": "Rodent",
+  "OTHER": "Other",
   "MENU": {
     "PETS": "Pets",
     "PROFILE": "Profile",
@@ -12,5 +17,27 @@
     "EMPTY_PETS_DESCRIPTION": "Good news! There are no lost pets at the moment. If you have lost a pet, please publish it so others can help you.",
     "ERROR_LOAD_PETS": "Error loading lost pets",
     "ERROR_LOAD_PETS_DESCRIPTION": "There was a problem loading the lost pets. Please try again later."
+  },
+  "PROFILE": {
+    "USER": "User",
+    "NOT_EMAIL_PROVIDER": "This user does not have an email provider"
+  },
+  "OWNED_PETS": {
+    "NO_PETS": "No owned pets",
+    "MY_PETS": "My Pets",
+    "NO_PETS_DESCRIPTION": "You don't have any pets yet. You can add one by clicking the button \"Add Pet\".",
+    "ADD_PET": "Add Pet"
+  },
+  "NEW_PET": {
+    "TITLE": "New Pet"
+  },
+  "PET_FORM": {
+    "NAME": "Name",
+    "BREED": "Breed",
+    "IMAGE": "Image",
+    "DESCRIPTION": "Description",
+    "LOCATION": "Location",
+    "CREATE": "Create Pet",
+    "EDIT": "Edit Pet"
   }
 }

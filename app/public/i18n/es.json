@@ -1,4 +1,9 @@
 {
+  "DOG": "Perro",
+  "CAT": "Gato",
+  "BIRD": "Pájaro",
+  "RODENT": "Roedor",
+  "OTHER": "Otro",
   "MENU": {
     "PETS": "Mascotas",
     "PUBLISH": "Publicar",
@@ -12,5 +17,27 @@
     "EMPTY_PETS_DESCRIPTION": "¡Buenas noticias! No hay mascotas perdidas en este momento. Si has perdido una mascota, por favor, publícala para que otros puedan ayudarte.",
     "ERROR_LOAD_PETS": "Error al cargar las mascotas perdidas",
     "ERROR_LOAD_PETS_DESCRIPTION": "Hubo un problema al cargar las mascotas perdidas. Por favor, inténtalo de nuevo más tarde."
+  },
+  "PROFILE": {
+    "USER": "Usuario",
+    "NOT_EMAIL_PROVIDER": "Este usuario no tiene un proveedor de correo electrónico"
+  },
+  "OWNED_PETS": {
+    "NO_PETS": "No hay mascotas propias",
+    "MY_PETS": "Mis Mascotas",
+    "NO_PETS_DESCRIPTION": "Aún no tienes mascotas. Puedes agregar una haciendo clic en el botón \"Agregar Mascota\".",
+    "ADD_PET": "Agregar Mascota"
+  },
+  "NEW_PET": {
+    "TITLE": "Nueva Mascota"
+  },
+  "PET_FORM": {
+    "NAME": "Nombre",
+    "BREED": "Raza",
+    "IMAGE": "Imagen",
+    "DESCRIPTION": "Descripción",
+    "LOCATION": "Ubicación",
+    "CREATE": "Crear Mascota",
+    "EDIT": "Editar Mascota"
   }
 }
