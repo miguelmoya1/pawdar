@@ -1,6 +1,7 @@
-import { Timestamp } from "firebase-admin/firestore";
-import { CreateUserParams, userRepository } from "../../../repository";
 import { auth } from "firebase-admin";
+import { Timestamp } from "firebase-admin/firestore";
+import { UserMapper } from "../../../domain";
+import { userRepository } from "../../../repository";
 
 const handle = async (uid?: string) => {
   if (!uid) {
@@ -12,14 +13,14 @@ const handle = async (uid?: string) => {
   if (!userExists) {
     const userRecord = await auth().getUser(uid);
 
-    const userProfile: CreateUserParams = {
+    const userProfile = UserMapper.toCreateDto({
       uid: userRecord.uid,
       email: userRecord.email || "",
       username: userRecord.displayName || "",
       createdAt: Timestamp.now(),
       lastLogin: Timestamp.now(),
       role: "user",
-    };
+    });
 
     return await userRepository.create(userProfile);
   }
@@ -29,4 +30,4 @@ const handle = async (uid?: string) => {
   });
 };
 
-export const upsetUserHandler = { handle };
+export const upsetUserCommand = { handle };

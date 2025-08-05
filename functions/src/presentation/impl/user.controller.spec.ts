@@ -1,10 +1,10 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { upsetUserHandler } from "../application/commands";
-import { upsetUserController } from "./user.controller";
 import { CallableRequest } from "firebase-functions/https";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { upsetUserCommand } from "../../application/commands";
+import { upsetUserController } from "./user.controller";
 
 vi.mock("../application/commands", () => ({
-  upsetUserHandler: { handle: vi.fn() },
+  upsetUserCommand: { handle: vi.fn() },
 }));
 
 describe("upsetUserController", () => {
@@ -12,7 +12,7 @@ describe("upsetUserController", () => {
     vi.clearAllMocks();
   });
 
-  it("should call the handler upsetUserHandler with the auth uid", async () => {
+  it("should call the handler upsetUserCommand with the auth uid", async () => {
     const authUid = "test-user";
     const event = {
       auth: { uid: authUid },
@@ -20,6 +20,6 @@ describe("upsetUserController", () => {
 
     await upsetUserController(event);
 
-    expect(upsetUserHandler.handle).toHaveBeenCalledWith(authUid);
+    expect(upsetUserCommand.handle).toHaveBeenCalledWith(authUid);
   });
 });

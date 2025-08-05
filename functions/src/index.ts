@@ -1,9 +1,12 @@
 import { https, setGlobalOptions } from "firebase-functions/v2";
-import { upsetUserController } from "./presentation/user.controller";
+import { PetController, UserController } from "./presentation";
 
 setGlobalOptions({ maxInstances: 10 });
 
-export const upsetUser = https.onCall((data) => upsetUserController(data));
+export const upsetUser = https.onCall((data) =>
+  UserController.upsetUserController(data),
+);
 
-// TODO: Add trigger to geohash when pet created or updated
-// TODO: add trigger to add ownerId to pet when created
+export const createPet = https.onCall((data) =>
+  PetController.createPetController(data),
+);

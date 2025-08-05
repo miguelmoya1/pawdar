@@ -1,1 +1,2 @@
-export { upsetUserHandler } from "../commands/impl/upset-user.handler";
+export { createPetCommand } from "./impl/create-pet.command";
+export { upsetUserCommand } from "./impl/upset-user.command";

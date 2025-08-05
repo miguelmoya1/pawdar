@@ -13,7 +13,7 @@ const isPet = (obj: unknown): obj is Pet => {
 export const mapPetArrayToEntityArray = (data: unknown) => {
   if (!Array.isArray(data) || !data.every(isPet)) {
     console.error('Invalid data structure for PetDto array:', data);
-    throw new Error(
+    throw new TypeError(
       'Invalid data structure received. Cannot map to Pet[] entity array.',
     );
   }
@@ -23,7 +23,7 @@ export const mapPetArrayToEntityArray = (data: unknown) => {
 export const mapPetToEntity = (data: unknown) => {
   if (!isPet(data)) {
     console.error('Invalid data structure for Pet:', data);
-    throw new Error(
+    throw new TypeError(
       'Invalid data structure received. Cannot map to Pet entity.',
     );
   }

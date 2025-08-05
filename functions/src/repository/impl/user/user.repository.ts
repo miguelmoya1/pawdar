@@ -1,4 +1,5 @@
-import { User } from "../../../domain";
+import { User } from "../../../domain/entities";
+import { UserMapper } from "../../../domain/mappers";
 import { db } from "../db";
 
 export type CreateUserParams = Partial<User> & { uid: string } & Pick<
@@ -8,19 +9,28 @@ export type CreateUserParams = Partial<User> & { uid: string } & Pick<
 
 const create = async (user: CreateUserParams) => {
   try {
-    return await db.collection("users").doc(user.uid).set(user);
+    const collection = db.collection("users");
+    const createdDoc = await collection.add(user);
+    const docRef = await collection.doc(createdDoc.id).get();
+
+    if (!docRef.exists) {
+      return null;
+    }
+
+    return UserMapper.toEntity(docRef.data());
   } catch (error) {
     return null;
   }
 };
 
-const getById = async (uid: string): Promise<User | null> => {
+const getById = async (uid: string) => {
   try {
     const doc = await db.collection("users").doc(uid).get();
+
     if (!doc.exists) {
       return null;
     }
-    return doc.data() as User;
+    return UserMapper.toEntity(doc.data());
   } catch (error) {
     return null;
   }
@@ -28,7 +38,15 @@ const getById = async (uid: string): Promise<User | null> => {
 
 const update = async (uid: string, data: Partial<User>) => {
   try {
-    return await db.collection("users").doc(uid).update(data);
+    const docRef = await db.collection("users").doc(uid).get();
+
+    if (!docRef.exists) {
+      return null;
+    }
+
+    await docRef.ref.set(data, { merge: true });
+
+    return UserMapper.toEntity({ ...docRef.data(), ...data });
   } catch (error) {
     return null;
   }

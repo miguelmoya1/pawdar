@@ -1,7 +1,7 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { upsetUserHandler } from "./upset-user.handler";
-import { userRepository } from "../../../repository";
 import { Timestamp } from "firebase-admin/firestore";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { userRepository } from "../../../repository";
+import { upsetUserCommand } from "./upset-user.command";
 
 vi.mock("firebase-admin", () => ({
   auth: () => ({
@@ -26,13 +26,13 @@ vi.mock("../../../repository", () => ({
   },
 }));
 
-describe("upsetUserHandler", () => {
+describe("upsetUserCommand", () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   it("creates a user if it does not exist", async () => {
-    const result = await upsetUserHandler.handle("abc123");
+    const result = await upsetUserCommand.handle("abc123");
     expect(userRepository.create).toHaveBeenCalledWith(
       expect.objectContaining({
         uid: "abc123",
@@ -46,7 +46,7 @@ describe("upsetUserHandler", () => {
   });
 
   it("updates lastLogin if the user already exists", async () => {
-    const result = await upsetUserHandler.handle("existing-user");
+    const result = await upsetUserCommand.handle("existing-user");
     expect(userRepository.update).toHaveBeenCalledWith(
       "existing-user",
       expect.objectContaining({ lastLogin: expect.any(Object) as Timestamp }),
@@ -56,7 +56,7 @@ describe("upsetUserHandler", () => {
   });
 
   it("throws an error if no uid is provided", async () => {
-    await expect(upsetUserHandler.handle()).rejects.toThrow(
+    await expect(upsetUserCommand.handle()).rejects.toThrow(
       "User must be authenticated.",
     );
     expect(userRepository.create).not.toHaveBeenCalled();
