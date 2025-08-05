@@ -1,11 +1,12 @@
 import { auth } from "firebase-admin";
 import { Timestamp } from "firebase-admin/firestore";
-import { UserMapper } from "../../../domain";
+import { AppError } from "../../../domain/errors";
+import { UserMapper } from "../../../domain/mappers";
 import { userRepository } from "../../../repository";
 
 const handle = async (uid?: string) => {
   if (!uid) {
-    throw new Error("User must be authenticated.");
+    throw new AppError("unauthenticated", "User must be authenticated.");
   }
 
   const userExists = await userRepository.getById(uid);
