@@ -5,24 +5,19 @@ import { db } from "../db";
 export type CreatePetParams = Partial<Pet> &
   Pick<
     Pet,
-    | "ownerId"
-    | "name"
-    | "type"
-    | "imagesUrl"
-    | "description"
-    | "status"
-    | "locationMissing"
-    | "lastLocation"
-    | "geohash"
+    "ownerId" | "name" | "type" | "imagesUrl" | "description" | "status"
   >;
 
 const create = async (pet: CreatePetParams) => {
   try {
+    console.log("Creating pet with data:", pet);
     const collection = db.collection("pets");
 
     const createdDoc = await collection.add(pet);
 
     const docRef = await collection.doc(createdDoc.id).get();
+
+    console.log("Pet created with ID:", docRef.id);
 
     if (!docRef.exists) {
       return null;
@@ -30,6 +25,7 @@ const create = async (pet: CreatePetParams) => {
 
     return PetMapper.toEntity(docRef.data());
   } catch (error) {
+    console.error("Error creating pet:", error);
     return null;
   }
 };

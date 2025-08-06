@@ -23,7 +23,7 @@ export class NewPet {
     });
   }
 
-  protected createPet(pet: Partial<CreatePetDto>) {
-    this.#createPetService.create(pet as CreatePetDto);
+  protected async createPet(pet: Partial<CreatePetDto>) {
+    await this.#createPetService.create(pet as CreatePetDto);
   }
 }

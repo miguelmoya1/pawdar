@@ -3,6 +3,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import {
   Auth,
   GoogleAuthProvider,
+  signInWithPopup,
   signOut,
   User,
   user,
@@ -29,6 +30,8 @@ export class AuthServiceImpl implements AuthService {
   }
 
   public async loginGoogle() {
+    await signInWithPopup(this.#auth, this.#googleProvider);
+
     const upsetUser = httpsCallable<unknown, User>(
       this.#functions,
       'upsetUser',
@@ -40,7 +43,6 @@ export class AuthServiceImpl implements AuthService {
       this.user.set(response.data);
       return true;
     } catch (error) {
-      console.error('Error during user upset:', error);
       return false;
     }
   }
@@ -50,12 +52,12 @@ export class AuthServiceImpl implements AuthService {
   }
 
   async #initialize() {
+    this.#googleProvider.addScope('profile');
+    this.#googleProvider.addScope('email');
+
     await this.#auth.authStateReady();
 
     this.user.set(this.#auth.currentUser || undefined);
-
-    this.#googleProvider.addScope('profile');
-    this.#googleProvider.addScope('email');
 
     this.#isReady.set(true);
   }

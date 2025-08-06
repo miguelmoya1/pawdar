@@ -10,15 +10,24 @@ export type CreateUserParams = Partial<User> & { uid: string } & Pick<
 const create = async (user: CreateUserParams) => {
   try {
     const collection = db.collection("users");
-    const createdDoc = await collection.add(user);
-    const docRef = await collection.doc(createdDoc.id).get();
 
-    if (!docRef.exists) {
+    const docRef = await collection.doc(user.uid).get();
+
+    if (docRef.exists) {
+      return UserMapper.toEntity(docRef.data());
+    }
+
+    await collection.doc(user.uid).set(user, { merge: true });
+
+    const doc = await collection.doc(user.uid).get();
+
+    if (!doc.exists) {
       return null;
     }
 
-    return UserMapper.toEntity(docRef.data());
+    return UserMapper.toEntity(doc.data());
   } catch (error) {
+    console.error("Error creating user:", error);
     return null;
   }
 };

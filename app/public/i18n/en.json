@@ -33,11 +33,17 @@
   },
   "PET_FORM": {
     "NAME": "Name",
+    "TYPE": "Type",
     "BREED": "Breed",
     "IMAGE": "Image",
     "DESCRIPTION": "Description",
     "LOCATION": "Location",
     "CREATE": "Create Pet",
-    "EDIT": "Edit Pet"
+    "EDIT": "Edit Pet",
+    "NAME_REQUIRED": "Name is required",
+    "TYPE_REQUIRED": "Type is required",
+    "IMAGE_REQUIRED": "Image is required",
+    "DESCRIPTION_REQUIRED": "Description is required",
+    "LOCATION_REQUIRED": "Location is required"
   }
 }

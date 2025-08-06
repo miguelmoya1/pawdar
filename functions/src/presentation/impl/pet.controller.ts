@@ -7,6 +7,7 @@ export class PetController {
     try {
       return await createPetCommand.handle(req.data, req.auth?.uid);
     } catch (error) {
+      console.error("Error in createPetController:", error);
       if (error instanceof AppError) {
         throw new HttpsError(error.code, error.message);
       }

@@ -8,7 +8,7 @@ const isUser = (user: unknown): user is User => {
 
   const maybeUser = user as { [key: string]: unknown };
 
-  const requiredFields = ["uid", "email", "username", "role", "createdAt"];
+  const requiredFields = ["uid", "email", "username"];
 
   for (const field of requiredFields) {
     if (!(field in maybeUser)) {
@@ -20,8 +20,7 @@ const isUser = (user: unknown): user is User => {
     typeof maybeUser.uid !== "string" ||
     typeof maybeUser.email !== "string" ||
     typeof maybeUser.username !== "string" ||
-    !["user", "admin"].includes(maybeUser.role as string) ||
-    !(maybeUser.createdAt instanceof Date)
+    !["user", "admin"].includes(maybeUser.role as string)
   ) {
     return false;
   }

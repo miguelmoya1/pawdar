@@ -15,63 +15,111 @@ import { CreatePetDto } from '../../dto/create-pet.dto';
   imports: [MatButton, TranslatePipe, ReactiveFormsModule],
   template: `
     <form (ngSubmit)="submit()" [formGroup]="form">
-      <div [formGroup]="form" class="flex flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
-          <input
-            placeholder="{{ 'PET_FORM.NAME' | translate }}"
-            class="flex w-full flex-1 resize-none overflow-hidden rounded-lg border border-gray-200 p-4 text-base font-normal leading-normal"
-            formControlName="name"
-          />
+      <div [formGroup]="form" class="flex flex-col px-4 py-3">
+        <label for="name" class="px-1 text-gray-600 text-base">
+          {{ 'PET_FORM.NAME' | translate }}
         </label>
+        <input
+          name="name"
+          class="flex w-full flex-1 rounded-lg border border-gray-200 p-4"
+          formControlName="name"
+          [class.border-red-500]="
+            form.get('name')?.invalid && form.get('name')?.touched
+          "
+        />
+        @if (form.get('name')?.invalid && form.get('name')?.touched) {
+          <span class="text-red-500 p-1">
+            {{ 'PET_FORM.NAME_REQUIRED' | translate }}
+          </span>
+        }
       </div>
 
-      <div class="flex flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
-          <select
-            class="flex w-full flex-1 resize-none overflow-hidden rounded-lg border border-gray-200 p-4 text-base font-normal leading-normal"
-            formControlName="type"
-          >
-            @for (type of petOptions; track type) {
-              <option [value]="type">
-                {{ type | translate }}
-              </option>
-            }
-          </select>
+      <div [formGroup]="form" class="flex flex-col px-4 py-3">
+        <label for="type" class="px-1 text-gray-600 text-base">
+          {{ 'PET_FORM.TYPE' | translate }}
         </label>
+        <select
+          name="type"
+          class="flex w-full flex-1 rounded-lg border border-gray-200 p-4"
+          formControlName="type"
+          [class.border-red-500]="
+            form.get('type')?.invalid && form.get('type')?.touched
+          "
+        >
+          @for (type of petOptions; track type) {
+            <option [value]="type">
+              {{ type | translate }}
+            </option>
+          }
+        </select>
+        @if (form.get('type')?.invalid && form.get('type')?.touched) {
+          <span class="text-red-500 p-1">
+            {{ 'PET_FORM.TYPE_REQUIRED' | translate }}
+          </span>
+        }
       </div>
 
-      <div class="flex flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
-          <input
-            placeholder="{{ 'PET_FORM.IMAGE' | translate }}"
-            class="flex w-full flex-1 resize-none overflow-hidden rounded-lg border border-gray-200 p-4 text-base font-normal leading-normal"
-            formControlName="image"
-          />
+      <div [formGroup]="form" class="flex flex-col px-4 py-3">
+        <label for="image" class="px-1 text-gray-600 text-base">
+          {{ 'PET_FORM.IMAGE' | translate }}
         </label>
+        <input
+          name="image"
+          class="flex w-full flex-1 rounded-lg border border-gray-200 p-4"
+          formControlName="image"
+          [class.border-red-500]="
+            form.get('image')?.invalid && form.get('image')?.touched
+          "
+        />
+        @if (form.get('image')?.invalid && form.get('image')?.touched) {
+          <span class="text-red-500 p-1">
+            {{ 'PET_FORM.IMAGE_REQUIRED' | translate }}
+          </span>
+        }
       </div>
 
-      <div class="flex flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
-          <textarea
-            placeholder="{{ 'PET_FORM.DESCRIPTION' | translate }}"
-            class="flex w-full flex-1 resize-none overflow-hidden rounded-lg border border-gray-200 p-4 text-base font-normal leading-normal"
-            formControlName="description"
-          ></textarea>
+      <div [formGroup]="form" class="flex flex-col px-4 py-3">
+        <label for="description" class="px-1 text-gray-600 text-base">
+          {{ 'PET_FORM.DESCRIPTION' | translate }}
         </label>
+        <textarea
+          name="description"
+          class="flex w-full flex-1 rounded-lg border border-gray-200 p-4"
+          formControlName="description"
+          [class.border-red-500]="
+            form.get('description')?.invalid && form.get('description')?.touched
+          "
+        ></textarea>
+        @if (
+          form.get('description')?.invalid && form.get('description')?.touched
+        ) {
+          <span class="text-red-500 p-1">
+            {{ 'PET_FORM.DESCRIPTION_REQUIRED' | translate }}
+          </span>
+        }
       </div>
 
-      <div class="flex flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
-          <input
-            placeholder="{{ 'PET_FORM.LOCATION' | translate }}"
-            class="flex w-full flex-1 resize-none overflow-hidden rounded-lg border border-gray-200 p-4 text-base font-normal leading-normal"
-            formControlName="location"
-          />
+      <div [formGroup]="form" class="flex flex-col px-4 py-3">
+        <label for="location" class="px-1 text-gray-600 text-base">
+          {{ 'PET_FORM.LOCATION' | translate }}
         </label>
+        <input
+          name="location"
+          class="flex w-full flex-1 rounded-lg border border-gray-200 p-4"
+          formControlName="location"
+          [class.border-red-500]="
+            form.get('location')?.invalid && form.get('location')?.touched
+          "
+        />
+        @if (form.get('location')?.invalid && form.get('location')?.touched) {
+          <span class="text-red-500 p-1">
+            {{ 'PET_FORM.LOCATION_REQUIRED' | translate }}
+          </span>
+        }
       </div>
 
       <div class="flex justify-center px-4 py-3">
-        <button matButton>
+        <button matButton [disabled]="!form.valid" type="submit">
           <span class="truncate">
             @switch (mode()) {
               @case ('edit') {

@@ -8,6 +8,7 @@ const db = getFirestore();
 db.settings({
   host: "localhost:8080",
   ssl: false,
+  ignoreUndefinedProperties: true,
 });
 
 export { db };

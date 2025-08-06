@@ -1,11 +1,12 @@
 import { GeoPoint, Timestamp } from '@angular/fire/firestore';
+import { PET_TYPE } from '../../../constants/pet_type';
 
 export abstract class Pet {
   declare public readonly uid: string;
   declare public readonly ownerId: string;
 
   declare public readonly name: string;
-  declare public readonly type: 'dog' | 'cat' | 'other';
+  declare public readonly type: PET_TYPE;
   declare public readonly imagesUrl: string[];
   declare public readonly description: string;
   declare public readonly status: 'missing' | 'found' | 'safe';

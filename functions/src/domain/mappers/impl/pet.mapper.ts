@@ -1,25 +1,29 @@
 import { CreatePetParams } from "../../../repository";
+import { PET_TYPE } from "../../constants/pet.constants";
 import { Pet, PetEntity } from "../../entities";
 
 const isPet = (pet: unknown): pet is Pet => {
   if (typeof pet !== "object" || pet === null) {
+    console.error("Invalid pet data: not an object or null");
     return false;
   }
 
   const maybePet = pet as { [key: string]: unknown };
 
-  const requiredFields = ["name", "status", "imagesUrl", "description"];
+  const requiredFields = ["name", "imagesUrl", "description"];
 
   for (const field of requiredFields) {
     if (!(field in maybePet)) {
+      console.error(`Invalid pet data: missing required field ${field}`);
       return false;
     }
   }
 
   if (
     typeof maybePet.type !== "string" ||
-    !["dog", "cat", "other"].includes(maybePet.type)
+    !Object.values(PET_TYPE).includes(maybePet.type as PET_TYPE)
   ) {
+    console.error("Invalid pet data: type must be 'dog', 'cat', or 'other'");
     return false;
   }
 
@@ -27,6 +31,7 @@ const isPet = (pet: unknown): pet is Pet => {
     !Array.isArray(maybePet.imagesUrl) ||
     !maybePet.imagesUrl.every((url) => typeof url === "string")
   ) {
+    console.error("Invalid pet data: imagesUrl must be an array of strings");
     return false;
   }
 
@@ -47,18 +52,12 @@ class PetMapper {
     }
 
     const petParams: CreatePetParams = {
-      id: pet.id,
       ownerId: pet.ownerId,
       name: pet.name,
       type: pet.type,
       imagesUrl: pet.imagesUrl,
       description: pet.description,
       status: pet.status,
-      locationMissing: pet.locationMissing,
-      lastLocation: pet.lastLocation,
-      geohash: pet.geohash,
-      createdAt: pet.createdAt,
-      lastUpdate: pet.lastUpdate,
     };
 
     return petParams;

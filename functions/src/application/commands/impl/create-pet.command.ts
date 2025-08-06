@@ -33,7 +33,7 @@ const handle = async (body: unknown, uid?: string) => {
     );
   }
 
-  return await petRepository.create(petCreateDto);
+  return await petRepository.create({ ...petCreateDto, status: "safe" });
 };
 
 export const createPetCommand = { handle };

@@ -28,4 +28,8 @@ export class PetServiceImpl implements PetService {
   });
 
   public readonly pets = this.#pets.asReadonly();
+
+  public async reload() {
+    this.#pets.reload();
+  }
 }

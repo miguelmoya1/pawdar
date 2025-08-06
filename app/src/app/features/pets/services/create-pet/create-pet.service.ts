@@ -1,25 +1,17 @@
 import { inject, Injectable } from '@angular/core';
-import { addDoc, collection, Firestore } from '@angular/fire/firestore';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { CreatePetDto } from '../../dto/create-pet.dto';
+import { Pet } from '../../entities/pet.entity';
 import { CreatePetService } from './create-pet.service.contract';
 
 @Injectable()
 export class CreatePetServiceImpl implements CreatePetService {
-  readonly #firestore = inject(Firestore);
-  readonly #petCollection = collection(this.#firestore, 'pets');
+  readonly #functions = inject(Functions);
 
   public async create(create: CreatePetDto) {
-    const { ownerId, ...petData } = create;
-
-    if (!ownerId) {
-      throw new Error('Create ID is required to create a pet');
-    }
-
-    const petEntity = {
-      ...petData,
-      ownerId,
-    };
-
-    await addDoc(this.#petCollection, petEntity);
+    await httpsCallable<CreatePetDto, Pet>(
+      this.#functions,
+      'createPet',
+    )(create);
   }
 }

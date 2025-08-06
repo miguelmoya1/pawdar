@@ -35,7 +35,7 @@ import { TOOLBAR_SERVICE } from '../../../../services';
           }}"
           imageUrl="imgs/sad.png"
         />
-        <button matButton>
+        <button matButton (click)="reloadPets()">
           <span class="truncate">{{ 'MISSING_PETS.RETRY' | translate }}</span>
         </button>
       </div>
@@ -60,5 +60,13 @@ export class MissingPets {
         this.#toolbarService.reset();
       });
     });
+
+    effect(() => {
+      console.log(this.petsResource.error());
+    });
+  }
+
+  protected reloadPets() {
+    this.#petsService.reload();
   }
 }

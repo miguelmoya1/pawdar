@@ -1,11 +1,12 @@
 import { firestore } from "firebase-admin";
+import { PET_TYPE } from "../../constants/pet.constants";
 
 export abstract class Pet {
   readonly id?: string;
   readonly ownerId: string;
 
   readonly name: string;
-  readonly type: "dog" | "cat" | "other";
+  readonly type: PET_TYPE;
   readonly imagesUrl: string[];
   readonly description: string;
   readonly status: "missing" | "found" | "safe";
