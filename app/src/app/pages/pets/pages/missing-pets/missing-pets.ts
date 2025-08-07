@@ -60,10 +60,6 @@ export class MissingPets {
         this.#toolbarService.reset();
       });
     });
-
-    effect(() => {
-      console.log(this.petsResource.error());
-    });
   }
 
   protected reloadPets() {

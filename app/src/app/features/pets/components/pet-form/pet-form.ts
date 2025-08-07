@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -119,7 +119,12 @@ import { CreatePetDto } from '../../dto/create-pet.dto';
       </div>
 
       <div class="flex justify-center px-4 py-3">
-        <button matButton [disabled]="!form.valid" type="submit">
+        <button
+          [disabled]="disabled()"
+          matButton
+          [disabled]="!form.valid"
+          type="submit"
+        >
           <span class="truncate">
             @switch (mode()) {
               @case ('edit') {
@@ -137,8 +142,10 @@ import { CreatePetDto } from '../../dto/create-pet.dto';
 })
 export class PetForm {
   public readonly mode = input.required<'create' | 'edit'>();
-  public readonly onSubmit = output<Partial<CreatePetDto>>();
+  public readonly disabled = input(false);
   public readonly defaultValue = input();
+
+  public readonly onSubmit = output<Partial<CreatePetDto>>();
 
   protected readonly form = new FormGroup({
     name: new FormControl('', {
@@ -164,6 +171,17 @@ export class PetForm {
   });
 
   protected readonly petOptions = Object.values(PET_TYPE);
+
+  constructor() {
+    effect(() => {
+      const defaultValue = this.defaultValue();
+
+      if (defaultValue) {
+        this.form.patchValue(defaultValue);
+        this.form.markAsPristine();
+      }
+    });
+  }
 
   protected submit() {
     if (!this.form.valid) {

@@ -6,7 +6,6 @@ export type CreateUserParams = Partial<User> &
   Pick<User, "email" | "username" | "role">;
 
 const create = async (user: CreateUserParams, uid: string) => {
-  console.log("Creating user with uid:", uid, "and data:", user);
   try {
     const collection = db.collection("users");
 

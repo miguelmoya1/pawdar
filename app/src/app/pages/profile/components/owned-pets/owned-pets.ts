@@ -59,5 +59,5 @@ import { Pet } from '../../../../features/pets/entities/pet.entity';
   `,
 })
 export class OwnedPets {
-  public readonly pets = input.required<Array<Pet>>();
+  public readonly pets = input.required<Pet[]>();
 }

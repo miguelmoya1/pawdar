@@ -22,7 +22,7 @@ import { UserProfile } from './components/user-profile/user-profile';
       }
 
       @if (petsResource.hasValue()) {
-        <app-owned-pets [pets]="petsResource.value()" />
+        <app-owned-pets class="mt-4" [pets]="petsResource.value()" />
       }
     </div>
   `,
