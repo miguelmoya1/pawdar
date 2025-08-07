@@ -25,7 +25,6 @@ const create = async (user: CreateUserParams, uid: string) => {
 
     return UserMapper.toEntity(doc.data());
   } catch (error) {
-    console.error("Error creating user:", error);
     return null;
   }
 };

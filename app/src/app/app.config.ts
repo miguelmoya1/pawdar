@@ -23,6 +23,11 @@ import {
   getFunctions,
   provideFunctions,
 } from '@angular/fire/functions';
+import {
+  connectStorageEmulator,
+  getStorage,
+  provideStorage,
+} from '@angular/fire/storage';
 import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -53,6 +58,9 @@ export const appConfig: ApplicationConfig = {
         measurementId: 'G-TPN9E0PMR5',
       }),
     ),
+    ScreenTrackingService,
+    UserTrackingService,
+    provideAnalytics(() => getAnalytics()),
     provideAuth(() => {
       const auth = getAuth();
       if (isDevMode()) {
@@ -60,15 +68,20 @@ export const appConfig: ApplicationConfig = {
       }
       return auth;
     }),
-    provideAnalytics(() => getAnalytics()),
-    ScreenTrackingService,
-    UserTrackingService,
     provideFirestore(() => {
       const firestore = getFirestore();
       if (isDevMode()) {
         connectFirestoreEmulator(firestore, 'localhost', 8080);
       }
       return firestore;
+    }),
+    provideStorage(() => {
+      const storage = getStorage();
+
+      if (isDevMode()) {
+        connectStorageEmulator(storage, 'localhost', 9199);
+      }
+      return storage;
     }),
     provideFunctions(() => {
       const functions = getFunctions();
