@@ -7,20 +7,13 @@ const isPet = (obj: unknown): obj is Pet => {
 
   const dto = obj as Record<string, unknown>;
 
-  return typeof dto['id'] === 'string';
+  return typeof dto['name'] === 'string';
 };
 
-export const mapPetArrayToEntityArray = (data: unknown) => {
-  if (!Array.isArray(data) || !data.every(isPet)) {
-    console.error('Invalid data structure for PetDto array:', data);
-    throw new TypeError(
-      'Invalid data structure received. Cannot map to Pet[] entity array.',
-    );
-  }
-  return data.map(mapPetToEntity);
-};
-
-export const mapPetToEntity = (data: unknown) => {
+/**
+ * The uid is the collection id in Firestore.
+ */
+export const mapPetToEntity = (data: unknown, uid: string) => {
   if (!isPet(data)) {
     console.error('Invalid data structure for Pet:', data);
     throw new TypeError(
@@ -29,7 +22,7 @@ export const mapPetToEntity = (data: unknown) => {
   }
 
   return PetEntity.from({
-    uid: data.uid,
+    uid: uid,
     name: data.name,
     description: data.description,
     type: data.type,

@@ -2,7 +2,6 @@ import { firestore } from "firebase-admin";
 import { PET_TYPE } from "../../constants/pet.constants";
 
 export abstract class Pet {
-  readonly id?: string;
   readonly ownerId: string;
 
   readonly name: string;
@@ -19,7 +18,6 @@ export abstract class Pet {
   readonly lastUpdate: firestore.Timestamp;
 
   protected constructor(pet: Pet) {
-    this.id = pet.id;
     this.ownerId = pet.ownerId;
 
     this.name = pet.name;

@@ -6,7 +6,7 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
-import { mapPetArrayToEntityArray } from '../../mappers/pet.mapper';
+import { mapPetToEntity } from '../../mappers/pet.mapper';
 import { PetService } from './pet.service.contract';
 
 @Injectable()
@@ -21,9 +21,13 @@ export class PetServiceImpl implements PetService {
         // TODO: Add geolocation filter (geohash)
       );
 
-      const data = await getDocs(queryRef);
+      const petSnapshot = await getDocs(queryRef);
 
-      return mapPetArrayToEntityArray(data.docs);
+      const pets = petSnapshot.docs.map((doc) => {
+        return mapPetToEntity(doc.data(), doc.id);
+      });
+
+      return pets;
     },
   });
 

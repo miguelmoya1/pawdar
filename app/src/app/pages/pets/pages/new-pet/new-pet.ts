@@ -1,7 +1,9 @@
 import { Component, effect, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   CREATE_PET_SERVICE,
   CreatePetDto,
+  OWNER_PET_SERVICE,
   PetForm,
 } from '../../../../features/pets';
 import { TOOLBAR_SERVICE } from '../../../../services';
@@ -14,6 +16,8 @@ import { TOOLBAR_SERVICE } from '../../../../services';
 export class NewPet {
   readonly #toolbarService = inject(TOOLBAR_SERVICE);
   readonly #createPetService = inject(CREATE_PET_SERVICE);
+  readonly #ownerPetService = inject(OWNER_PET_SERVICE);
+  readonly #router = inject(Router);
 
   constructor() {
     effect((cleanup) => {
@@ -25,5 +29,9 @@ export class NewPet {
 
   protected async createPet(pet: Partial<CreatePetDto>) {
     await this.#createPetService.create(pet as CreatePetDto);
+
+    this.#ownerPetService.reload();
+
+    await this.#router.navigate(['/profile']);
   }
 }

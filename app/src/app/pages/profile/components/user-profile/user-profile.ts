@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
-import { User } from '@angular/fire/auth';
 import { TranslatePipe } from '@ngx-translate/core';
+import { UserEntity } from '../../../../features/users';
 
 @Component({
   selector: 'app-user-profile',
@@ -18,7 +18,7 @@ import { TranslatePipe } from '@ngx-translate/core';
           <p
             class="text-[22px] font-bold leading-tight tracking-[-0.015em] text-center"
           >
-            {{ user.displayName || 'PROFILE.USER' | translate }}
+            {{ user.username || 'PROFILE.USER' | translate }}
           </p>
           <p
             class="text-gray-400 text-base font-normal leading-normal text-center"
@@ -34,5 +34,5 @@ import { TranslatePipe } from '@ngx-translate/core';
   },
 })
 export class UserProfile {
-  public readonly user = input.required<User>();
+  public readonly user = input.required<UserEntity>();
 }

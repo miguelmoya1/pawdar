@@ -14,8 +14,9 @@ const handle = async (uid?: string) => {
   if (!userExists) {
     const userRecord = await auth().getUser(uid);
 
+    console.log("Creating user with uid:", uid, "and data:", userRecord);
+
     const userProfile = UserMapper.toCreateDto({
-      uid: userRecord.uid,
       email: userRecord.email || "",
       username: userRecord.displayName || "",
       createdAt: Timestamp.now(),
@@ -23,8 +24,12 @@ const handle = async (uid?: string) => {
       role: "user",
     });
 
-    return await userRepository.create(userProfile);
+    console.log("User profile to create:", userProfile);
+
+    return await userRepository.create(userProfile, uid);
   }
+
+  console.log("Updating user with uid:", uid);
 
   return await userRepository.update(uid, {
     lastLogin: Timestamp.now(),

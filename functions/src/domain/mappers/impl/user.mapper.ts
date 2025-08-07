@@ -8,7 +8,7 @@ const isUser = (user: unknown): user is User => {
 
   const maybeUser = user as { [key: string]: unknown };
 
-  const requiredFields = ["uid", "email", "username"];
+  const requiredFields = ["email", "username"];
 
   for (const field of requiredFields) {
     if (!(field in maybeUser)) {
@@ -17,7 +17,6 @@ const isUser = (user: unknown): user is User => {
   }
 
   if (
-    typeof maybeUser.uid !== "string" ||
     typeof maybeUser.email !== "string" ||
     typeof maybeUser.username !== "string" ||
     !["user", "admin"].includes(maybeUser.role as string)
@@ -38,11 +37,11 @@ class UserMapper {
 
   static toCreateDto(user: unknown) {
     if (!isUser(user)) {
+      console.error("Invalid user data for creation:", user);
       throw new Error("Invalid user data for creation");
     }
 
     const userParams: CreateUserParams = {
-      uid: user.uid,
       email: user.email,
       username: user.username,
       createdAt: user.createdAt,

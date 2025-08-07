@@ -7,7 +7,7 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { AUTH_SERVICE } from '../../../auth';
-import { mapPetArrayToEntityArray } from '../../mappers/pet.mapper';
+import { mapPetToEntity } from '../../mappers/pet.mapper';
 import { OwnerPetService } from './owner-pet.service.contract';
 
 @Injectable()
@@ -22,17 +22,29 @@ export class OwnerPetServiceImpl implements OwnerPetService {
     loader: async ({ params }) => {
       const { ownerId } = params;
 
+      if (!ownerId) {
+        console.warn('No ownerId provided, returning empty pets list.');
+        return undefined;
+      }
+
       const queryRef = query(
         this.#petCollection,
         where('ownerId', '==', ownerId),
       );
 
-      const docs = await getDocs(queryRef);
+      const docsRef = await getDocs(queryRef);
 
-      return mapPetArrayToEntityArray(docs.docs);
+      const pets = docsRef.docs.map((doc) => {
+        return mapPetToEntity(doc.data(), doc.id);
+      });
+
+      return pets;
     },
-    defaultValue: [],
   });
 
   public readonly pets = this.#pets.asReadonly();
+
+  public reload() {
+    this.#pets.reload();
+  }
 }

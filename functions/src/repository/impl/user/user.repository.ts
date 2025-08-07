@@ -2,24 +2,23 @@ import { User } from "../../../domain/entities";
 import { UserMapper } from "../../../domain/mappers";
 import { db } from "../db";
 
-export type CreateUserParams = Partial<User> & { uid: string } & Pick<
-    User,
-    "email" | "username" | "role"
-  >;
+export type CreateUserParams = Partial<User> &
+  Pick<User, "email" | "username" | "role">;
 
-const create = async (user: CreateUserParams) => {
+const create = async (user: CreateUserParams, uid: string) => {
+  console.log("Creating user with uid:", uid, "and data:", user);
   try {
     const collection = db.collection("users");
 
-    const docRef = await collection.doc(user.uid).get();
+    const docRef = await collection.doc(uid).get();
 
     if (docRef.exists) {
       return UserMapper.toEntity(docRef.data());
     }
 
-    await collection.doc(user.uid).set(user, { merge: true });
+    await collection.doc(uid).set(user, { merge: true });
 
-    const doc = await collection.doc(user.uid).get();
+    const doc = await collection.doc(uid).get();
 
     if (!doc.exists) {
       return null;
