@@ -49,7 +49,7 @@ export class MissingPets {
   readonly #toolbarService = inject(TOOLBAR_SERVICE);
   readonly #petsService = inject(PET_SERVICE);
 
-  protected readonly petsResource = this.#petsService.pets;
+  protected readonly petsResource = this.#petsService.petsResource;
 
   constructor() {
     effect((cleanup) => {

@@ -3,10 +3,7 @@ import { PetMapper } from "../../../domain/mappers";
 import { db } from "../db";
 
 export type CreatePetParams = Partial<Pet> &
-  Pick<
-    Pet,
-    "ownerId" | "name" | "type" | "imagesUrl" | "description" | "status"
-  >;
+  Pick<Pet, "ownerId" | "name" | "type" | "description" | "status">;
 
 const create = async (pet: CreatePetParams) => {
   try {
@@ -20,7 +17,10 @@ const create = async (pet: CreatePetParams) => {
       return null;
     }
 
-    return PetMapper.toEntity(docRef.data());
+    return {
+      id: docRef.id,
+      data: PetMapper.toEntity(docRef.data()),
+    };
   } catch (error) {
     return null;
   }

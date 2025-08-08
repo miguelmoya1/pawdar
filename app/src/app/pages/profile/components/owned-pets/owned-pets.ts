@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
@@ -30,7 +30,7 @@ import { Pet } from '../../../../features/pets/entities/pet.entity';
         <div class="flex items-center gap-4">
           <div
             class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-14"
-            [style.background-image]="'url(' + pet.imagesUrl[0] + ')'"
+            [style.background-image]="'url(' + image() + ')'"
           ></div>
 
           <div class="flex flex-col justify-center">
@@ -60,4 +60,10 @@ import { Pet } from '../../../../features/pets/entities/pet.entity';
 })
 export class OwnedPets {
   public readonly pets = input.required<Pet[]>();
+
+  protected readonly image = computed(() => {
+    const pet = this.pets();
+
+    return pet.length > 0 ? pet[0].imagesUrl[0] : 'imgs/sad.png';
+  });
 }

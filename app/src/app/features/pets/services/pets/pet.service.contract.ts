@@ -3,7 +3,7 @@ import { PetEntity } from '../../entities/pet.entity';
 import { PetServiceImpl } from './pet.service';
 
 export interface PetService {
-  readonly pets: Resource<PetEntity[] | undefined>;
+  readonly petsResource: Resource<PetEntity[] | undefined>;
 
   reload: () => void;
 }

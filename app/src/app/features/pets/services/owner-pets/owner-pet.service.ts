@@ -15,9 +15,9 @@ export class OwnerPetServiceImpl implements OwnerPetService {
   readonly #firestore = inject(Firestore);
   readonly #petCollection = collection(this.#firestore, 'pets');
   readonly #authService = inject(AUTH_SERVICE);
-  readonly #pets = resource({
+  readonly #petsResource = resource({
     params: () => ({
-      ownerId: this.#authService.user.value()?.uid,
+      ownerId: this.#authService.userResource.value()?.uid,
     }),
     loader: async ({ params }) => {
       const { ownerId } = params;
@@ -34,17 +34,15 @@ export class OwnerPetServiceImpl implements OwnerPetService {
 
       const docsRef = await getDocs(queryRef);
 
-      const pets = docsRef.docs.map((doc) => {
+      return docsRef.docs.map((doc) => {
         return mapPetToEntity(doc.data(), doc.id);
       });
-
-      return pets;
     },
   });
 
-  public readonly pets = this.#pets.asReadonly();
+  public readonly petsResource = this.#petsResource.asReadonly();
 
   public reload() {
-    this.#pets.reload();
+    this.#petsResource.reload();
   }
 }

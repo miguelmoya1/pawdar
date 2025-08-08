@@ -2,9 +2,6 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // --- FUNCIONES DE AYUDA ---
-
     function isSignedIn() {
       return request.auth != null;
     }
@@ -17,17 +14,6 @@ service cloud.firestore {
       return isSignedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
-
-    function validatePetData(data) {      
-      return data.keys().hasOnly(['name', 'description', 'imagesUrl', 'status', 'ownerId']) &&
-             data.name is string && data.name.size() >= 3 &&
-             data.description is string &&
-             data.imagesUrl is list && data.imagesUrl.size() >= 1 &&
-             data.ownerId is string && data.ownerId.size() > 0;
-    }
-
-
-
     match /users/{userId} {
       allow create: if isOwner(userId);
 
@@ -39,7 +25,7 @@ service cloud.firestore {
 
       allow create: if false;
 
-      allow update: if (isOwner(resource.data.ownerId) || isAdmin()) && validatePetData(request.resource.data);
+      allow update: if isOwner(resource.data.ownerId) || isAdmin();
 
       allow delete: if isOwner(resource.data.ownerId) || isAdmin();
     }

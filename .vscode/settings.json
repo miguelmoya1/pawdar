@@ -8,7 +8,8 @@
     "geohash",
     "nodenext",
     "pawdar",
-    "predeploy"
+    "predeploy",
+    "webp"
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always",

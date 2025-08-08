@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { isLoggedFn } from '../../../features/auth';
 
 const PETS_ROUTES: Routes = [
   {
@@ -9,6 +10,7 @@ const PETS_ROUTES: Routes = [
   {
     path: 'new',
     title: 'New Pet',
+    canMatch: [isLoggedFn],
     loadComponent: () =>
       import('../pages/new-pet/new-pet').then((m) => m.NewPet),
   },

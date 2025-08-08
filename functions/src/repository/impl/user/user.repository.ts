@@ -5,15 +5,9 @@ import { db } from "../db";
 export type CreateUserParams = Partial<User> &
   Pick<User, "email" | "username" | "role">;
 
-const create = async (user: CreateUserParams, uid: string) => {
+const upset = async (user: CreateUserParams, uid: string) => {
   try {
     const collection = db.collection("users");
-
-    const docRef = await collection.doc(uid).get();
-
-    if (docRef.exists) {
-      return UserMapper.toEntity(docRef.data());
-    }
 
     await collection.doc(uid).set(user, { merge: true });
 
@@ -23,7 +17,10 @@ const create = async (user: CreateUserParams, uid: string) => {
       return null;
     }
 
-    return UserMapper.toEntity(doc.data());
+    return {
+      id: doc.id,
+      data: UserMapper.toEntity(doc.data()),
+    };
   } catch (error) {
     return null;
   }
@@ -42,26 +39,9 @@ const getById = async (uid: string) => {
   }
 };
 
-const update = async (uid: string, data: Partial<User>) => {
-  try {
-    const docRef = await db.collection("users").doc(uid).get();
-
-    if (!docRef.exists) {
-      return null;
-    }
-
-    await docRef.ref.set(data, { merge: true });
-
-    return UserMapper.toEntity({ ...docRef.data(), ...data });
-  } catch (error) {
-    return null;
-  }
-};
-
 const userRepository = {
-  create,
+  upset,
   getById,
-  update,
 };
 
 export { userRepository };

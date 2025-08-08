@@ -13,7 +13,7 @@ import { PetService } from './pet.service.contract';
 export class PetServiceImpl implements PetService {
   readonly #firestore = inject(Firestore);
   readonly #petCollection = collection(this.#firestore, 'pets');
-  readonly #pets = resource({
+  readonly #petsResource = resource({
     loader: async () => {
       const queryRef = query(
         this.#petCollection,
@@ -31,9 +31,9 @@ export class PetServiceImpl implements PetService {
     },
   });
 
-  public readonly pets = this.#pets.asReadonly();
+  public readonly petsResource = this.#petsResource.asReadonly();
 
   public async reload() {
-    this.#pets.reload();
+    this.#petsResource.reload();
   }
 }

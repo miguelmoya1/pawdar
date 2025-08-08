@@ -7,15 +7,28 @@ import {
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ImageForm } from '../../../../components';
 import { PET_TYPE } from '../../../../constants/pet_type';
 import { CreatePetDto } from '../../dto/create-pet.dto';
 
 @Component({
   selector: 'app-pet-form',
-  imports: [MatButton, TranslatePipe, ReactiveFormsModule],
+  imports: [MatButton, TranslatePipe, ReactiveFormsModule, ImageForm],
   template: `
     <form (ngSubmit)="submit()" [formGroup]="form">
-      <div [formGroup]="form" class="flex flex-col px-4 py-3">
+      <div class="flex flex-col px-4 py-3">
+        <div class="flex flex-col items-center justify-center px-4 py-3 gap-2">
+          <label for="image" class="px-1 text-gray-600 text-base">
+            {{ 'PET_FORM.IMAGE' | translate }}
+          </label>
+          <app-image-form formControlName="image" />
+          @if (form.get('image')?.invalid && form.get('image')?.touched) {
+            <span class="text-red-500 p-1">
+              {{ 'PET_FORM.IMAGE_REQUIRED' | translate }}
+            </span>
+          }
+        </div>
+
         <label for="name" class="px-1 text-gray-600 text-base">
           {{ 'PET_FORM.NAME' | translate }}
         </label>
@@ -60,25 +73,6 @@ import { CreatePetDto } from '../../dto/create-pet.dto';
       </div>
 
       <div [formGroup]="form" class="flex flex-col px-4 py-3">
-        <label for="image" class="px-1 text-gray-600 text-base">
-          {{ 'PET_FORM.IMAGE' | translate }}
-        </label>
-        <input
-          name="image"
-          class="flex w-full flex-1 rounded-lg border border-gray-200 p-4"
-          formControlName="image"
-          [class.border-red-500]="
-            form.get('image')?.invalid && form.get('image')?.touched
-          "
-        />
-        @if (form.get('image')?.invalid && form.get('image')?.touched) {
-          <span class="text-red-500 p-1">
-            {{ 'PET_FORM.IMAGE_REQUIRED' | translate }}
-          </span>
-        }
-      </div>
-
-      <div [formGroup]="form" class="flex flex-col px-4 py-3">
         <label for="description" class="px-1 text-gray-600 text-base">
           {{ 'PET_FORM.DESCRIPTION' | translate }}
         </label>
@@ -95,25 +89,6 @@ import { CreatePetDto } from '../../dto/create-pet.dto';
         ) {
           <span class="text-red-500 p-1">
             {{ 'PET_FORM.DESCRIPTION_REQUIRED' | translate }}
-          </span>
-        }
-      </div>
-
-      <div [formGroup]="form" class="flex flex-col px-4 py-3">
-        <label for="location" class="px-1 text-gray-600 text-base">
-          {{ 'PET_FORM.LOCATION' | translate }}
-        </label>
-        <input
-          name="location"
-          class="flex w-full flex-1 rounded-lg border border-gray-200 p-4"
-          formControlName="location"
-          [class.border-red-500]="
-            form.get('location')?.invalid && form.get('location')?.touched
-          "
-        />
-        @if (form.get('location')?.invalid && form.get('location')?.touched) {
-          <span class="text-red-500 p-1">
-            {{ 'PET_FORM.LOCATION_REQUIRED' | translate }}
           </span>
         }
       </div>
@@ -145,7 +120,10 @@ export class PetForm {
   public readonly disabled = input(false);
   public readonly defaultValue = input();
 
-  public readonly onSubmit = output<Partial<CreatePetDto>>();
+  public readonly onSubmit = output<{
+    file?: File | null;
+    data: Partial<CreatePetDto>;
+  }>();
 
   protected readonly form = new FormGroup({
     name: new FormControl('', {
@@ -156,15 +134,10 @@ export class PetForm {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    image: new FormControl('', {
-      nonNullable: true,
+    image: new FormControl<string | File | null>(null, {
       validators: [Validators.required],
     }),
     description: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
-    location: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required],
     }),
@@ -189,12 +162,16 @@ export class PetForm {
     }
 
     const petData = this.form.getRawValue();
+    const imgVal = this.form.get('image')?.value;
+    const file = imgVal instanceof File ? imgVal : null;
 
     this.onSubmit.emit({
-      name: petData.name,
-      type: petData.type,
-      imagesUrl: [petData.image],
-      description: petData.description,
+      file,
+      data: {
+        name: petData.name,
+        type: petData.type,
+        description: petData.description,
+      },
     });
   }
 }

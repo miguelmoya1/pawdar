@@ -35,8 +35,8 @@ export class Profile {
   readonly #petsService = inject(OWNER_PET_SERVICE);
   readonly #authService = inject(AUTH_SERVICE);
 
-  protected readonly petsResource = this.#petsService.pets;
-  protected readonly userResource = this.#authService.user;
+  protected readonly petsResource = this.#petsService.petsResource;
+  protected readonly userResource = this.#authService.userResource;
 
   constructor() {
     effect((cleanup) => {

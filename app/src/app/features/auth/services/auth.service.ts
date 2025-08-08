@@ -1,12 +1,15 @@
 import { computed, inject, Injectable, resource, signal } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import {
   Auth,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
+  user,
 } from '@angular/fire/auth';
 import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
+import { BaseResponseDto } from '../../../dto/base-response.dto';
 import { mapUserToEntity } from '../../users';
 import { AuthService } from './auth.service.contract';
 
@@ -17,18 +20,26 @@ export class AuthServiceImpl implements AuthService {
   readonly #auth = inject(Auth);
   readonly #isReady = signal(false);
   readonly #googleProvider = new GoogleAuthProvider();
-  readonly #userId = signal<string | undefined>(undefined);
+  readonly #userAuthResource = rxResource({
+    stream: () => {
+      return user(this.#auth);
+    },
+  });
 
-  readonly #user = resource({
-    params: () => ({ userId: this.#userId() }),
+  readonly #userResource = resource({
+    params: () => ({
+      userAuth: this.#userAuthResource.hasValue()
+        ? this.#userAuthResource.value()
+        : undefined,
+    }),
     loader: async ({ params }) => {
-      const userId = params.userId;
+      const userAuth = params.userAuth;
 
-      if (!userId) {
+      if (!userAuth) {
         return undefined;
       }
 
-      const docRef = doc(this.#firestore, 'users', userId);
+      const docRef = doc(this.#firestore, 'users', userAuth.uid);
 
       const userSnapshot = await getDoc(docRef);
 
@@ -46,9 +57,14 @@ export class AuthServiceImpl implements AuthService {
     },
   });
 
-  public readonly user = this.#user.asReadonly();
-  readonly isLogged = computed(() => Boolean(this.user.hasValue()));
-  readonly isReady = this.#isReady.asReadonly();
+  public readonly userResource = this.#userResource.asReadonly();
+  readonly isReady = computed(() => {
+    return (
+      this.#isReady() &&
+      !this.#userAuthResource.isLoading() &&
+      !this.#userResource.isLoading()
+    );
+  });
 
   constructor() {
     this.#initialize();
@@ -57,19 +73,19 @@ export class AuthServiceImpl implements AuthService {
   public async loginGoogle() {
     await signInWithPopup(this.#auth, this.#googleProvider);
 
-    const upsetUser = httpsCallable(this.#functions, 'upsetUser');
+    const upsetUser = httpsCallable<undefined, BaseResponseDto<unknown>>(
+      this.#functions,
+      'upsetUser',
+    );
 
     try {
       const { data } = await upsetUser();
 
-      const uid = this.#auth.currentUser?.uid;
-
-      if (!uid) {
+      if (!data.uid) {
         return false;
       }
 
-      this.#user.set(mapUserToEntity(data, uid));
-      this.#userId.set(uid);
+      this.#userResource.set(mapUserToEntity(data.data, data.uid));
       return true;
     } catch (error) {
       return false;
@@ -86,10 +102,7 @@ export class AuthServiceImpl implements AuthService {
 
     await this.#auth.authStateReady();
 
-    this.#userId.set(this.#auth.currentUser?.uid);
-    // ! need this to wait doe the trigger of the user resource
-    setTimeout(() => {
-      this.#isReady.set(true);
-    });
+    this.#userAuthResource.set(this.#auth.currentUser);
+    this.#isReady.set(true);
   }
 }

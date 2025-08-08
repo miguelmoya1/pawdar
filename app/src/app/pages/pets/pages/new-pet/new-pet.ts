@@ -35,11 +35,17 @@ export class NewPet {
     });
   }
 
-  protected async createPet(pet: Partial<CreatePetDto>) {
+  protected async createPet(pet: {
+    data: Partial<CreatePetDto>;
+    file?: File | null;
+  }) {
     this.disableForm.set(true);
 
     try {
-      await this.#createPetService.create(pet as CreatePetDto);
+      await this.#createPetService.create(
+        pet.data as CreatePetDto,
+        pet.file ?? undefined,
+      );
 
       this.#ownerPetService.reload();
 

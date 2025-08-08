@@ -10,7 +10,7 @@ const isPet = (pet: unknown): pet is Pet => {
 
   const maybePet = pet as { [key: string]: unknown };
 
-  const requiredFields = ["name", "imagesUrl", "description"];
+  const requiredFields = ["name", "description"];
 
   for (const field of requiredFields) {
     if (!(field in maybePet)) {
@@ -24,14 +24,6 @@ const isPet = (pet: unknown): pet is Pet => {
     !Object.values(PET_TYPE).includes(maybePet.type as PET_TYPE)
   ) {
     console.error("Invalid pet data: type must be 'dog', 'cat', or 'other'");
-    return false;
-  }
-
-  if (
-    !Array.isArray(maybePet.imagesUrl) ||
-    !maybePet.imagesUrl.every((url) => typeof url === "string")
-  ) {
-    console.error("Invalid pet data: imagesUrl must be an array of strings");
     return false;
   }
 
@@ -55,7 +47,6 @@ class PetMapper {
       ownerId: pet.ownerId,
       name: pet.name,
       type: pet.type,
-      imagesUrl: pet.imagesUrl,
       description: pet.description,
       status: pet.status,
     };

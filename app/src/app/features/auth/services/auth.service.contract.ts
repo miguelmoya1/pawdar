@@ -3,8 +3,7 @@ import { UserEntity } from '../../users';
 import { AuthServiceImpl } from './auth.service';
 
 export interface AuthService {
-  readonly isLogged: Signal<boolean>;
-  readonly user: Resource<UserEntity | undefined>;
+  readonly userResource: Resource<UserEntity | undefined>;
   readonly isReady: Signal<boolean>;
 
   loginGoogle(): Promise<boolean>;

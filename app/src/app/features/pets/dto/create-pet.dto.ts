@@ -1,4 +1,3 @@
-import { GeoPoint } from '@angular/fire/firestore';
 import { PET_TYPE } from '../../../constants/pet_type';
 
 export type CreatePetDto = {
@@ -6,6 +5,5 @@ export type CreatePetDto = {
 
   readonly name: string;
   readonly type: PET_TYPE;
-  readonly imagesUrl: string[];
   readonly description: string;
 };
