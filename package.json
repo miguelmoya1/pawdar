@@ -3,12 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "test": "npm test --workspaces",
-    "test:rules": "npm test -w rules-spec",
-    "test:functions": "npm test -w functions",
-    "start": "npm run start -w app",
+    "test": "cd app && npm test",
+    "test:rules": "cd packages/rules-spec && npm test",
+    "test:functions": "cd functions && npm test",
+    "start": "cd app && npm start",
     "emulators": "firebase emulators:start",
-    "functions": "npm run serve -w functions"
+    "functions": "cd functions && npm run serve"
   },
   "repository": {
     "type": "git",
@@ -19,11 +19,7 @@
   "bugs": {
     "url": "https://github.com/miguelmoya1/pawdar/issues"
   },
-  "workspaces": [
-    "app",
-    "packages/*",
-    "functions"
-  ],
+
   "homepage": "https://github.com/miguelmoya1/pawdar#readme",
   "description": ""
 }

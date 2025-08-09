@@ -11,4 +11,4 @@ export const createPet = https.onCall((data) =>
   PetController.createPetController(data),
 );
 
-// TODO: Add validator for the image size (max 5mb)
+// TODO: Add validator for the image size (max 5mb) front
