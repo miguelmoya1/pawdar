@@ -11,4 +11,4 @@ export const createPet = https.onCall((data) =>
   PetController.createPetController(data),
 );
 
-// TODO: Remove the id in the user firestore and entity and the pet
+// TODO: Add validator for the image size (max 5mb)

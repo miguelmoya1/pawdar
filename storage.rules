@@ -4,10 +4,9 @@ service firebase.storage {
   match /b/{bucket}/o {
     match /users/{userId}/pets/{petId}/images/{imageId} {
       allow read: if true;
-      allow write: if debug(true);
-      //  debug(request.auth.uid) == debug(userId)
-      //   && request.resource.size < 2 * 1024 * 1024 // 2MB limit
-      //   && request.resource.contentType.matches('image/(jpeg|png|webp|gif)');
+      allow write: request.auth.uid == userId
+        && request.resource.size < 5 * 1024 * 1024 // 5MB limit
+        && request.resource.contentType.matches('image/(jpeg|png|webp|gif)');
     }
   }
 }
