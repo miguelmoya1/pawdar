@@ -20,7 +20,7 @@ export class CreatePetServiceImpl implements CreatePetService {
       BaseResponseDto<unknown>
     >(
       this.#functions,
-      'createPet',
+      'createPet'
     )(create);
 
     const { data } = petResponse;
@@ -35,7 +35,7 @@ export class CreatePetServiceImpl implements CreatePetService {
       const uploadResponse = await this.uploadFileService.uploadPetImage(
         this.#authService.userResource.value()?.uid ?? '',
         petId,
-        file,
+        file
       );
 
       if (!uploadResponse) {
@@ -45,10 +45,9 @@ export class CreatePetServiceImpl implements CreatePetService {
       const petDocRef = doc(this.#firestore, 'pets', petId);
 
       console.log('Updating pet document with image URL:', uploadResponse);
-      const response = await updateDoc(petDocRef, {
+      await updateDoc(petDocRef, {
         imagesUrl: [uploadResponse],
       });
-      console.log('Pet document updated successfully:', response);
     }
   }
 }

@@ -15,6 +15,7 @@ export class OwnerPetServiceImpl implements OwnerPetService {
   readonly #firestore = inject(Firestore);
   readonly #petCollection = collection(this.#firestore, 'pets');
   readonly #authService = inject(AUTH_SERVICE);
+
   readonly #petsResource = resource({
     params: () => ({
       ownerId: this.#authService.userResource.value()?.uid,

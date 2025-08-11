@@ -1,10 +1,10 @@
-import { Component, input } from '@angular/core';
+import { Component, input, model, output } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Info } from '../../../../components/impl/info/info';
-import { Pet } from '../../../../features/pets/entities/pet.entity';
+import { Info } from '../../../../components';
+import { PetEntity } from '../../../../features/pets';
 
 @Component({
   selector: 'app-owned-pets',
@@ -26,7 +26,7 @@ import { Pet } from '../../../../features/pets/entities/pet.entity';
     <div class="flex flex-col gap-4">
       @for (pet of pets(); track pet.uid) {
         <div
-          class="flex items-center gap-4 border border-gray-400 rounded-xl px-4 py-2 justify-between"
+          class="flex items-center gap-4 rounded-xl border p-2 border-gray-200 justify-between"
         >
           <div class="flex items-center gap-4">
             <div
@@ -47,7 +47,36 @@ import { Pet } from '../../../../features/pets/entities/pet.entity';
           </div>
 
           <div class="shrink-0">
-            <mat-icon>edit</mat-icon>
+            @if (pet.isMissing()) {
+              <button
+                matButton
+                (click)="handleMarkAsSafe(pet)"
+                [disabled]="disabled()"
+              >
+                <span class="truncate">
+                  {{ 'OWNED_PETS.MARK_AS_SAFE' | translate }}
+                </span>
+                <mat-icon> check_circle </mat-icon>
+              </button>
+            }
+            @if (pet.isSafe()) {
+              <button
+                matButton
+                (click)="handleMarkAsMissing(pet)"
+                [disabled]="disabled()"
+              >
+                <span class="truncate">
+                  {{ 'OWNED_PETS.MARK_AS_MISSING' | translate }}
+                </span>
+                <mat-icon> report_problem </mat-icon>
+              </button>
+            }
+            <button matButton (click)="handleEdit(pet)" [disabled]="disabled()">
+              <span class="truncate">
+                {{ 'OWNED_PETS.EDIT_PET' | translate }}
+              </span>
+              <mat-icon> edit </mat-icon>
+            </button>
           </div>
         </div>
       } @empty {
@@ -61,10 +90,29 @@ import { Pet } from '../../../../features/pets/entities/pet.entity';
   `,
 })
 export class OwnedPets {
-  public readonly pets = input.required<Pet[]>();
+  public readonly disabled = model<boolean>(false);
+  public readonly pets = input.required<PetEntity[]>();
+  public readonly onMarkAsSafe = output<PetEntity>();
+  public readonly onMarkAsMissing = output<PetEntity>();
+  public readonly onEdit = output<PetEntity>();
 
-  protected getImage(index: number): string {
+  protected getImage(index: number) {
     const pet = this.pets()[index];
-    return pet.imagesUrl.length > 0 ? pet.imagesUrl[0] : 'imgs/sad.png';
+    return pet.imagesUrl?.length > 0 ? pet.imagesUrl[0] : 'imgs/sad.png';
+  }
+
+  protected handleMarkAsSafe(pet: PetEntity) {
+    this.disabled.set(true);
+    this.onMarkAsSafe.emit(pet);
+  }
+
+  protected handleMarkAsMissing(pet: PetEntity) {
+    this.disabled.set(true);
+    this.onMarkAsMissing.emit(pet);
+  }
+
+  protected handleEdit(pet: PetEntity) {
+    this.disabled.set(true);
+    this.onEdit.emit(pet);
   }
 }

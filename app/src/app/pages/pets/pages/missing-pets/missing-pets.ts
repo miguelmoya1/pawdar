@@ -2,7 +2,7 @@ import { Component, effect, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Info } from '../../../../components/impl/info/info';
+import { Info } from '../../../../components';
 import { PET_SERVICE, PetCard } from '../../../../features/pets';
 import { TOOLBAR_SERVICE } from '../../../../services';
 
@@ -13,19 +13,21 @@ import { TOOLBAR_SERVICE } from '../../../../services';
     @if (petsResource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
     }
-
     @if (petsResource.hasValue()) {
-      @for (pet of petsResource.value(); track pet.uid) {
-        <app-pet-card [pet]="pet" />
-      } @empty {
-        <app-info
-          label="{{ 'MISSING_PETS.EMPTY_PETS' | translate }}"
-          description="{{ 'MISSING_PETS.EMPTY_PETS_DESCRIPTION' | translate }}"
-          imageUrl="imgs/happy.png"
-        />
-      }
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (pet of petsResource.value(); track pet.uid) {
+          <app-pet-card [pet]="pet" />
+        } @empty {
+          <app-info
+            label="{{ 'MISSING_PETS.EMPTY_PETS' | translate }}"
+            description="{{
+              'MISSING_PETS.EMPTY_PETS_DESCRIPTION' | translate
+            }}"
+            imageUrl="imgs/happy.png"
+          />
+        }
+      </div>
     }
-
     @if (petsResource.error()) {
       <div class="flex flex-col items-center gap-6">
         <app-info

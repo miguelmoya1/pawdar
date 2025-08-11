@@ -26,7 +26,10 @@
     "NO_PETS": "No owned pets",
     "MY_PETS": "My Pets",
     "NO_PETS_DESCRIPTION": "You don't have any pets yet. You can add one by clicking the button \"Add Pet\".",
-    "ADD_PET": "Add Pet"
+    "ADD_PET": "Add Pet",
+    "EDIT_PET": "Edit Pet",
+    "MARK_AS_SAFE": "Mark as Safe",
+    "MARK_AS_MISSING": "Mark as Missing"
   },
   "NEW_PET": {
     "TITLE": "New Pet"
@@ -45,5 +48,8 @@
     "IMAGE_REQUIRED": "Image is required",
     "DESCRIPTION_REQUIRED": "Description is required",
     "LOCATION_REQUIRED": "Location is required"
+  },
+  "PET_CARD": {
+    "I_FOUND_PET": "I found this pet!"
   }
 }

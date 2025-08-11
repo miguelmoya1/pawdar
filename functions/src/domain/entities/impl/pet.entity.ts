@@ -8,7 +8,7 @@ export abstract class Pet {
   readonly type: PET_TYPE;
   readonly imagesUrl: string[];
   readonly description: string;
-  readonly status: "missing" | "found" | "safe";
+  readonly status: "missing" | "safe";
 
   readonly locationMissing: firestore.GeoPoint;
   readonly lastLocation: firestore.GeoPoint;

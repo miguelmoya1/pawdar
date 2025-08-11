@@ -11,7 +11,7 @@ import { Menu, Toolbar } from './components';
       class="grid grid-rows-[auto_1fr_auto] h-full md:grid-rows-[auto_auto_1fr]"
     >
       <app-toolbar />
-      <main>
+      <main class="overflow-y-auto">
         <router-outlet />
       </main>
       <app-menu class="md:row-start-1" />

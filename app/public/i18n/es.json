@@ -26,7 +26,10 @@
     "NO_PETS": "No hay mascotas propias",
     "MY_PETS": "Mis Mascotas",
     "NO_PETS_DESCRIPTION": "Aún no tienes mascotas. Puedes agregar una haciendo clic en el botón \"Agregar Mascota\".",
-    "ADD_PET": "Agregar Mascota"
+    "ADD_PET": "Agregar Mascota",
+    "EDIT_PET": "Editar Mascota",
+    "MARK_AS_SAFE": "Marcar como Seguro",
+    "MARK_AS_MISSING": "Marcar como Perdido"
   },
   "NEW_PET": {
     "TITLE": "Nueva Mascota"
@@ -39,5 +42,8 @@
     "LOCATION": "Ubicación",
     "CREATE": "Crear Mascota",
     "EDIT": "Editar Mascota"
+  },
+  "PET_CARD": {
+    "I_FOUND_PET": "¡He encontrado esta mascota!"
   }
 }

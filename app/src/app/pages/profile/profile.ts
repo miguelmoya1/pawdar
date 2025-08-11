@@ -1,7 +1,11 @@
 import { Component, effect, inject } from '@angular/core';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { AUTH_SERVICE } from '../../features/auth';
-import { OWNER_PET_SERVICE } from '../../features/pets';
+import {
+  OWNER_PET_SERVICE,
+  PetEntity,
+  UPDATE_PET_SERVICE,
+} from '../../features/pets';
 import { TOOLBAR_SERVICE } from '../../services';
 import { OwnedPets } from './components/owned-pets/owned-pets';
 import { UserProfile } from './components/user-profile/user-profile';
@@ -22,7 +26,13 @@ import { UserProfile } from './components/user-profile/user-profile';
       }
 
       @if (petsResource.hasValue()) {
-        <app-owned-pets class="mt-4" [pets]="petsResource.value()" />
+        <app-owned-pets
+          class="mt-4"
+          [pets]="petsResource.value()"
+          (onMarkAsMissing)="handleMarkAsMissing($event)"
+          (onMarkAsSafe)="handleMarkAsSafe($event)"
+          [disabled]="petsResource.isLoading()"
+        />
       }
     </div>
   `,
@@ -32,10 +42,11 @@ import { UserProfile } from './components/user-profile/user-profile';
 })
 export class Profile {
   readonly #toolbarService = inject(TOOLBAR_SERVICE);
-  readonly #petsService = inject(OWNER_PET_SERVICE);
+  readonly #ownedPetsService = inject(OWNER_PET_SERVICE);
   readonly #authService = inject(AUTH_SERVICE);
+  readonly #updatePetService = inject(UPDATE_PET_SERVICE);
 
-  protected readonly petsResource = this.#petsService.petsResource;
+  protected readonly petsResource = this.#ownedPetsService.petsResource;
   protected readonly userResource = this.#authService.userResource;
 
   constructor() {
@@ -47,5 +58,17 @@ export class Profile {
         this.#toolbarService.reset();
       });
     });
+  }
+
+  protected async handleMarkAsSafe(pet: PetEntity) {
+    await this.#updatePetService.markAsSafe(pet.uid);
+
+    this.#ownedPetsService.reload();
+  }
+
+  protected async handleMarkAsMissing(pet: PetEntity) {
+    await this.#updatePetService.markAsMissing(pet.uid);
+
+    this.#ownedPetsService.reload();
   }
 }
