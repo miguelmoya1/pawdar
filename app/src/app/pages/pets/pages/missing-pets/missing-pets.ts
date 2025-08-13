@@ -17,16 +17,17 @@ import { TOOLBAR_SERVICE } from '../../../../services';
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         @for (pet of petsResource.value(); track pet.uid) {
           <app-pet-card [pet]="pet" />
-        } @empty {
-          <app-info
-            label="{{ 'MISSING_PETS.EMPTY_PETS' | translate }}"
-            description="{{
-              'MISSING_PETS.EMPTY_PETS_DESCRIPTION' | translate
-            }}"
-            imageUrl="imgs/happy.png"
-          />
         }
       </div>
+
+      @if (petsResource.value().length === 0) {
+        <app-info
+          class="w-full"
+          label="{{ 'MISSING_PETS.EMPTY_PETS' | translate }}"
+          description="{{ 'MISSING_PETS.EMPTY_PETS_DESCRIPTION' | translate }}"
+          imageUrl="imgs/happy.png"
+        />
+      }
     }
     @if (petsResource.error()) {
       <div class="flex flex-col items-center gap-6">

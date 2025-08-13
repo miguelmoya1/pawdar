@@ -3,6 +3,7 @@ import { MatProgressBar } from '@angular/material/progress-bar';
 import { AUTH_SERVICE } from '../../features/auth';
 import {
   OWNER_PET_SERVICE,
+  PET_SERVICE,
   PetEntity,
   UPDATE_PET_SERVICE,
 } from '../../features/pets';
@@ -21,17 +22,17 @@ import { UserProfile } from './components/user-profile/user-profile';
 
       <hr class="mt-4 text-gray-500/20" />
 
-      @if (petsResource.isLoading()) {
+      @if (ownedPetsResource.isLoading()) {
         <mat-progress-bar mode="indeterminate" />
       }
 
-      @if (petsResource.hasValue()) {
+      @if (ownedPetsResource.hasValue()) {
         <app-owned-pets
           class="mt-4"
-          [pets]="petsResource.value()"
+          [pets]="ownedPetsResource.value()"
           (onMarkAsMissing)="handleMarkAsMissing($event)"
           (onMarkAsSafe)="handleMarkAsSafe($event)"
-          [disabled]="petsResource.isLoading()"
+          [disabled]="ownedPetsResource.isLoading()"
         />
       }
     </div>
@@ -43,10 +44,11 @@ import { UserProfile } from './components/user-profile/user-profile';
 export class Profile {
   readonly #toolbarService = inject(TOOLBAR_SERVICE);
   readonly #ownedPetsService = inject(OWNER_PET_SERVICE);
+  readonly #petService = inject(PET_SERVICE);
   readonly #authService = inject(AUTH_SERVICE);
   readonly #updatePetService = inject(UPDATE_PET_SERVICE);
 
-  protected readonly petsResource = this.#ownedPetsService.petsResource;
+  protected readonly ownedPetsResource = this.#ownedPetsService.petsResource;
   protected readonly userResource = this.#authService.userResource;
 
   constructor() {
@@ -64,11 +66,13 @@ export class Profile {
     await this.#updatePetService.markAsSafe(pet.uid);
 
     this.#ownedPetsService.reload();
+    this.#petService.reload();
   }
 
   protected async handleMarkAsMissing(pet: PetEntity) {
     await this.#updatePetService.markAsMissing(pet.uid);
 
     this.#ownedPetsService.reload();
+    this.#petService.reload();
   }
 }
